@@ -2,7 +2,7 @@ FROM node:lts
 
 WORKDIR /home/marcio/ger-projetos
 
-COPY package.json ./
+COPY package.json ./app/src
 
 RUN npm install
 
