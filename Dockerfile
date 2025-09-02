@@ -1,13 +1,20 @@
-FROM node:lts
+# Use uma imagem oficial do Node.js
+FROM node:18-alpine
 
-WORKDIR /home/marcio/ger-projetos
+# Defina o diretório de trabalho dentro do contêiner
+WORKDIR /app
 
-COPY package.json ./app/src
+# Copie os arquivos de dependência
+COPY package*.json ./
 
+# Instale as dependências
 RUN npm install
 
+# Copie o restante do código
 COPY . .
 
-EXPOSE 3100
+# Exponha a porta que o app vai rodar
+EXPOSE 3000
 
-CMD [ "node", "start" ]
+# Comando para rodar a aplicação
+CMD ["node", "index.js"]
