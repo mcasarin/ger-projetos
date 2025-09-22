@@ -7,7 +7,7 @@ Este é um projeto para gerenciamento de projetos de pesquisa
 
 Laravel em container (bitnami);
 MariaDB em container (bitnami);
-VPS com portainer;
+VPS com portainer (docker swarm);
 Traefik como proxy.
 
 ## Contributing
