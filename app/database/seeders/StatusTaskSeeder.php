@@ -3,11 +3,11 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use App\Models\StatusProj;
 use Illuminate\Database\Seeder;
 use Exception;
+use App\Models\StatusTask;
 
-class StatusProjSeeder extends Seeder
+class StatusTaskSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,20 +15,18 @@ class StatusProjSeeder extends Seeder
     public function run(): void
     {
         try{
-            // Verifica se a tabela já possui registros
-            $count = StatusProj::table('status_proj')->count();
+            $count = StatusTask::count();
             if($count > 0){
                 return; // Já existem registros, não faz nada
             } else {
-                $statuses = ['Novo', 'Planejado', 'Em Andamento', 'Concluído', 'Cancelado'];
+                $statuses = ['Não iniciada', 'Em Andamento', 'Concluída', 'Com impedimento', 'Atrasada'];
                 foreach($statuses as $status){
-                    StatusProj::table('status_proj')->insert([
+                    StatusTask::create([
                         'status' => $status,
                     ]);
                 }
             }
-            
-        }catch(Exception $e){
+            }catch(Exception $e){
             // Tratar erro de duplicidade ou outro erro
             // Log::error('Erro ao criar status: ' . $e->getMessage());
         }

@@ -18,12 +18,12 @@ return new class extends Migration
             $table->decimal('initial_budget', 15, 2);
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
-            $table->integer('status');
+            $table->integer('status')->default(0);
             $table->decimal('total_revenues', 15, 2)->default(0);
             $table->decimal('total_expenses', 15, 2)->default(0);
             $table->integer('owner_id');
-            $table->timestamp('created');
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
     }
 

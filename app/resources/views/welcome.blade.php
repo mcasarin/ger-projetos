@@ -9,5 +9,11 @@
     </head>
     <body class="antialiased">
         <h1>Gerenciador de projetos</h1>
+        <a href="{{ route('projects.index') }}">Listar projetos</a><br>
+        <a href="{{ route('projects.create') }}">Cadastrar projetos</a><br>
+        <a href="{{ route('users.index') }}">Listar usuários</a><br>
+        <a href="{{ route('users.create') }}">Cadastrar usuários</a><br>
+        <a href="{{ route('status_projs.index') }}">Listar status de projetos</a><br>
+        <a href="{{ route('status_projs.create') }}">Cadastrar status de projetos</a><br>
     </body>
 </html>

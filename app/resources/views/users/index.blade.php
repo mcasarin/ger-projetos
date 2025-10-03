@@ -1,5 +1,5 @@
 <div>
-    <h2>Listagem de Projetos</h2>
+    <h2>Lista de usuários</h2>
     @if(session('success'))
         <div style="color: green;">
             {{ session('success') }}

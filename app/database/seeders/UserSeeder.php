@@ -23,15 +23,15 @@ class UserSeeder extends Seeder
         ]);
         }
         
-    try {
-        // Se não encontrar o registro com e-mail, cadastra
-        User::firstOrCreate(
-            ['email' => 'ricardo@etwas.com.br'], // busca
-            ['name' => 'Ricardo', 'email' => 'ricardo@etwas.com.br','password' => '123456A#'], // cadastro
-        );
-    }catch(Exception $e){
-        // Tratar erro de duplicidade ou outro erro
-        //Log::error('Erro ao criar usuário: ' . $e->getMessage());
-    }
+        try {
+            // Se não encontrar o registro com e-mail, cadastra
+            User::firstOrCreate(
+                ['email' => 'ricardo@etwas.com.br'], // busca
+                ['name' => 'Ricardo', 'email' => 'ricardo@etwas.com.br','password' => '123456A#'], // cadastro
+            );
+        }catch(Exception $e){
+            // Tratar erro de duplicidade ou outro erro
+            //Log::error('Erro ao criar usuário: ' . $e->getMessage());
+        }
     }
 }

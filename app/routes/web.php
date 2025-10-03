@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ProjectsController;
+use App\Http\Controllers\UsersController;
+use App\Http\Controllers\StatusProjsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -8,5 +10,11 @@ Route::get('/', function () {
 });
 
 // Projetos
-Route::get('/projects',[ProjectsController::class, 'index'])->name('projects.index');
-
+Route::get('/index-project',[ProjectsController::class, 'index'])->name('projects.index');
+Route::get('/create-project',[ProjectsController::class, 'create'])->name('projects.create');
+Route::post('/store-project',[ProjectsController::class, 'store'])->name('projects.store');
+Route::get('/index-user',[UsersController::class, 'index'])->name('users.index');
+Route::get('/create-user',[UsersController::class, 'create'])->name('users.create');
+Route::post('/store-user',[UsersController::class, 'store'])->name('users.store');
+Route::get('/index-status-proj',[StatusProjsController::class, 'index'])->name('status_projs.index');
+Route::get('/create-status-proj',[StatusProjsController::class, 'create'])->name('status_projs.create');
