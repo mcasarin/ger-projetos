@@ -15,20 +15,18 @@ class StatusProjSeeder extends Seeder
     public function run(): void
     {
         try{
-            // Verifica se a tabela já possui registros
-            $count = StatusProj::table('status_proj')->count();
+            $count = StatusProj::count();
             if($count > 0){
                 return; // Já existem registros, não faz nada
             } else {
                 $statuses = ['Novo', 'Planejado', 'Em Andamento', 'Concluído', 'Cancelado'];
                 foreach($statuses as $status){
-                    StatusProj::table('status_proj')->insert([
+                    StatusProj::create([
                         'status' => $status,
                     ]);
                 }
             }
-            
-        }catch(Exception $e){
+            }catch(Exception $e){
             // Tratar erro de duplicidade ou outro erro
             // Log::error('Erro ao criar status: ' . $e->getMessage());
         }

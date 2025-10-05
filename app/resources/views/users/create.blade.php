@@ -1,4 +1,5 @@
-<div>
+@extends('layout.admin')
+@section('content')
     <h1>Cadastrar usuário</h1>
     <form action="{{ route('users.store') }}" method="POST">
         @csrf
@@ -16,4 +17,4 @@
             <input type="password" id="password" name="password" required>
         </div>
         <button type="submit">Cadastrar</button>
-</div>
+@endsection

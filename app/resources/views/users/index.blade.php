@@ -1,8 +1,14 @@
-<div>
+@extends('layouts.admin')
+@section('content')
     <h2>Lista de usuários</h2>
-    @if(session('success'))
-        <div style="color: green;">
-            {{ session('success') }}
-        </div>
-    @endif
-</div>
+    <x-alert />
+    @forelse ($users as $user)
+        <p>
+            <strong>ID:</strong> {{ $user->id }}<br>
+            <strong>Nome:</strong> {{ $user->name }}<br>
+            <strong>Email:</strong> {{ $user->email }}<br>
+        </p>
+    @empty
+        <p>Nenhum usuário encontrado.</p>
+    @endforelse
+@endsection

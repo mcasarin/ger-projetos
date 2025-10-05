@@ -18,6 +18,7 @@ return new class extends Migration
             $table->decimal('initial_budget', 15, 2);
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
+            $table->string('project_manager')->nullable();
             $table->integer('status')->default(0);
             $table->decimal('total_revenues', 15, 2)->default(0);
             $table->decimal('total_expenses', 15, 2)->default(0);

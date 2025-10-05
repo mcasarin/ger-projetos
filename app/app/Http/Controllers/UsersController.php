@@ -7,8 +7,11 @@ use Illuminate\Http\Request;
 class UsersController extends Controller
 {
     public function index() {
+        // Recupera os registros do banco de dados
+        $users = User::orderBy('id', 'asc')->get();
+
         //Carregar a view
-        return view('users.index');
+        return view('users.index',['users' => $users]);
     }
 
     public function create() {

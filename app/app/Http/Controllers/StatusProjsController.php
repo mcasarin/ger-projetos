@@ -7,8 +7,11 @@ use Illuminate\Http\Request;
 class StatusProjsController extends Controller
 {
     public function index() {
+        // Recuperar registros do banco de dados
+        $status_proj = StatusProj::orderBy('id', 'asc')->get();
+
         //Carregar a view
-        return view('status_projs.index');
+        return view('status_projs.index',['status_proj' => $status_proj]);
     }
     public function create() {
         //Caregar a view

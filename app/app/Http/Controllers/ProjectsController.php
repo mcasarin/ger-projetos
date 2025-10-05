@@ -9,8 +9,17 @@ class ProjectsController extends Controller
 {
     // Listar todos os projetos
     public function index() {
+        // Recuperar registros do banco de dados
+        $projects = Project::orderBy('id', 'asc')->get();
+        
         //Carregar a view
-        return view('projects.index');
+        return view('projects.index', ['projects' => $projects]);
+    }
+    
+    // Detalhes do projeto
+    public function show(Project $project) {
+        // Carregar a view com os detalhes do projeto
+        return view('projects.show', ['project' => $project]);
     }
 
     // Formulário para criar um novo projeto
@@ -28,8 +37,9 @@ class ProjectsController extends Controller
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'initial_budget' => $request->input('initial_budget'),
-            // 'start_date' => $request->input('start_date'),
-            // 'end_date' => $request->input('end_date'),
+            'start_date' => $request->input('start_date'),
+            'end_date' => $request->input('end_date'),
+            'project_manager' => $request->input('project_manager'),
             // 'status' => $request->input('status'),
             'owner_id' => $userId
         ]);
