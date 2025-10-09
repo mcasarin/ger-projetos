@@ -5,7 +5,7 @@ Este é um projeto para gerenciamento de projetos de pesquisa
 
 ## O que utilizamos
 
-Laravel em container (bitnami);
+Laravel em container (bitnami - precisará ser alterado! Bitnami resolveu não dar mais suporte a sistemas opensource e criou uma linha enterprise/paga);
 MariaDB em container (bitnami);
 VPS com portainer (docker swarm);
 Traefik como proxy.

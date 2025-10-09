@@ -1,4 +1,4 @@
-@extends('layout.admin')
+@extends('layouts.admin')
 @section('content')
     <h1>Cadastrar usuário</h1>
     <form action="{{ route('users.store') }}" method="POST">

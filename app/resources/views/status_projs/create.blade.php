@@ -1,4 +1,4 @@
-@extends('layout.admin')
+@extends('layouts.admin')
 @section('content')
     <h2>Cadastrar Status de Projetos</h2>
     <form action="{{ route('status_projs.store') }}" method="POST">
