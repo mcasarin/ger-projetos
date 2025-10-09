@@ -30,4 +30,10 @@ class UsersController extends Controller
         // Redirecionar para a lista de usuários com uma mensagem de sucesso
         return redirect()->route('users.index')->with('success', 'Usuário cadastrado com sucesso!');
     }
+
+    // Detalhes do usuário
+    public function show(User $user) {
+        // Carregar a view com os detalhes do projeto
+        return view('users.show', ['user' => $user]);
+    }
 }
