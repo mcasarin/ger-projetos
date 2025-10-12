@@ -14,13 +14,15 @@
             <strong>Data de Término:</strong> {{ \Carbon\Carbon::parse($project->end_date)->format('d/m/Y') }}<br>
             <strong>Gerente do Projeto:</strong> {{ $project->project_manager }}<br>
             <strong>Status:</strong> {{ $project->status ? $project->status->name : 'N/A' }}<br>
-            <a href="{{ route('projects.show', ['project' => $project->id]) }}">Detalhes</a>
-            {{-- <form action="{{ route('projects.destroy', $project->id) }}" method="POST" style="display:inline;">
+            <a href="{{ route('projects.show', ['project' => $project->id]) }}">Detalhes</a><br>
+            <a href="{{ route('projects.edit', ['project' => $project->id]) }}">Editar</a><br>
+            <form action="{{ route('projects.destroy', $project->id) }}" method="POST" style="display:inline;">
                 @csrf
                 @method('DELETE')
                 <button type="submit" onclick="return confirm('Tem certeza que deseja excluir este projeto?')">Excluir</button>
-            </form> --}}
+            </form>
         </p>
+        <hr>
     @empty
         <p>Nenhum projeto encontrado.</p>
     @endforelse

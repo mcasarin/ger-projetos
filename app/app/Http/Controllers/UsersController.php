@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Exception;
 
 class UsersController extends Controller
 {
@@ -35,5 +36,28 @@ class UsersController extends Controller
     public function show(User $user) {
         // Carregar a view com os detalhes do projeto
         return view('users.show', ['user' => $user]);
+    }
+
+    public function edit(User $user) {
+        // Carregar a view com o formulário de edição
+        return view('users.edit', ['user' => $user]);
+    }
+
+    public function update(Request $request, User $user) {
+        
+        // Validar os dados recebidos do formulário
+        try{
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => $request->password,
+        ]);
+
+        return redirect()->route('users.show', ['user' => $user->id])->with('success', 'Usuário editado com sucesso!');
+        
+        } catch (Exception $e) {
+            // Redirecionar para a lista de projetos com uma mensagem de sucesso
+            return back()->withInput()->with('error', 'Usuário não editado!!!');
+        }
     }
 }

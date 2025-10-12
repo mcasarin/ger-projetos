@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\Project;
 use Illuminate\Http\Request;
+use Exception;
 
 class ProjectsController extends Controller
 {
@@ -33,13 +33,13 @@ class ProjectsController extends Controller
         // Pega o usuário da sessão, temporariamente fixo
         $userId = "1"; // Substitua pelo ID do usuário autenticado
         // Validar os dados recebidos do formulário
-        Project::create([
-            'name' => $request->input('name'),
-            'description' => $request->input('description'),
-            'initial_budget' => $request->input('initial_budget'),
-            'start_date' => $request->input('start_date'),
-            'end_date' => $request->input('end_date'),
-            'project_manager' => $request->input('project_manager'),
+        $project = Project::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'initial_budget' => $request->initial_budget,
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
+            'project_manager' => $request->project_manager,
             // 'status' => $request->input('status'),
             'owner_id' => $userId
         ]);
@@ -48,6 +48,44 @@ class ProjectsController extends Controller
         //$project = \App\Models\Project::create($validatedData);
 
         // Redirecionar para a lista de projetos com uma mensagem de sucesso
-        return redirect()->route('projects.index')->with('success', 'Projeto cadastrado com sucesso!');
+        return redirect()->route('projects.show', ['project' => $project->id])->with('success', 'Projeto cadastrado com sucesso!');
+    }
+
+    // Formulário para editar um projeto existente
+    public function edit(Project $project) {
+        // Carregar a view com o formulário de edição
+        return view('projects.edit', ['project' => $project]);
+    }
+
+    public function update(Request $request, Project $project) {
+        $userId = "1"; // Substitua pelo ID do usuário autenticado
+        // Validar os dados recebidos do formulário
+        try{
+        $project->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'initial_budget' => $request->initial_budget,
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
+            'project_manager' => $request->project_manager,
+            // 'status' => 'nullable|string|max:50',
+            'owner_id' => $userId
+        ]);
+
+        return redirect()->route('projects.show', ['project' => $project->id])->with('success', 'Projeto editado com sucesso!');
+
+        } catch (Exception $e) {
+            // Redirecionar para a lista de projetos com uma mensagem de sucesso
+            return back()->withInput()->with('error', 'Projeto não editado!!!');
+        }
+    }
+
+    public function destroy(Project $project) {
+        try {
+            $project->delete();
+            return redirect()->route('projects.index')->with('success', 'Projeto excluído com sucesso!');
+        } catch (Exception $e) {
+            return redirect()->route('projects.index')->with('error', 'Erro ao excluir o projeto.');
+        }
     }
 }
