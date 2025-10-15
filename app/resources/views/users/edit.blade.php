@@ -13,9 +13,5 @@
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" value="{{ old('email', $user->email) }}" required>
         </div>
-        <div>
-            <label for="password">Senha:</label>
-            <input type="password" id="password" name="password" required>
-        </div>
         <button type="submit">Atualizar</button>
 @endsection

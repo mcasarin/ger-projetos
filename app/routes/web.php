@@ -27,6 +27,8 @@ Route::prefix('user')->group(function (){
     Route::get('/{user}',[UsersController::class, 'show'])->name('users.show');
     Route::get('/{user}/edit',[UsersController::class, 'edit'])->name('users.edit');
     Route::put('/{user}',[UsersController::class, 'update'])->name('users.update');
+    Route::get('/{user}/edit-password',[UsersController::class, 'editPassword'])->name('users.edit_password');
+    Route::put('/{user}/update-password',[UsersController::class, 'updatePassword'])->name('users.update_password');
 });
 // Rotas de status dos projetos
 Route::prefix('status-proj')->group(function (){
