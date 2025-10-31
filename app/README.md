@@ -5,10 +5,13 @@ Este é um projeto para gerenciamento de projetos de pesquisa
 
 ## O que utilizamos
 
-Laravel em container (bitnami - precisará ser alterado! Bitnami resolveu não dar mais suporte a sistemas opensource e criou uma linha enterprise/paga);
+Laravel em container (bitnami - precisará ser alterado!*);
 MariaDB em container (bitnami);
 VPS com portainer (docker swarm);
-Traefik como proxy.
+Traefik como proxy e gerenciador SSL.
+Laravel Auditing [site](https://laravel-auditing.com/)
+
+nota: o projeto Bitnami descontinuou as versões baseadas em sistemas operacionais opensource e gratuitas no Docker Hub, será necessário avaliar um substituto.
 
 ## Contributing
 

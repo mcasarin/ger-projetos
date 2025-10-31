@@ -4,11 +4,11 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\StatusUser;
 use Exception;
-use App\Models\StatusTask;
 use Illuminate\Support\Facades\Log;
 
-class StatusTaskSeeder extends Seeder
+class StatusUserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -16,13 +16,13 @@ class StatusTaskSeeder extends Seeder
     public function run(): void
     {
         try{
-            $count = StatusTask::count();
+            $count = StatusUser::count();
             if($count > 0){
                 return; // Já existem registros, não faz nada
             } else {
-                $statuses = ['Não iniciada', 'Em Andamento', 'Concluída', 'Com impedimento', 'Atrasada'];
+                $statuses = ['Novo', 'Ativo', 'Inativo', 'Pendente'];
                 foreach($statuses as $status){
-                    StatusTask::create([
+                    StatusUser::create([
                         'status' => $status,
                     ]);
                 }

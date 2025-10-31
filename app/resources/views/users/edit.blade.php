@@ -7,7 +7,7 @@
         <div>
             <label for="name">Nome do Usuário:</label>
             <input type="text" id="name" name="name" value="{{
-            old('name', $user->name) }}" required>
+            old('name', $user->name) }}" >
         </div>
         <div>
             <label for="email">Email:</label>

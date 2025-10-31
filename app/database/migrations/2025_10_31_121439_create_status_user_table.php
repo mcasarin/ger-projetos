@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('projectlinks', function (Blueprint $table) {
+        Schema::create('status_user', function (Blueprint $table) {
             $table->id();
-            $table->integer('level')->default(0);
-            //$table->integer('project_id'); -- foreign key moved in another migration
-            $table->integer('link_id');
+            $table->string('status');
             $table->timestamps();
         });
     }
@@ -25,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('projectlinks');
+        Schema::dropIfExists('status_user');
     }
 };

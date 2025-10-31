@@ -7,10 +7,14 @@
         <p>
             <strong>ID:</strong> {{ $user->id }}<br>
             <strong>Nome:</strong> {{ $user->name }}<br>
+            <strong>Email:</strong> {{ $user->email }}<br>
+            <strong>Status:</strong> {{ $user->statusUser ? $user->statusUser->status : 'N/A' }}<br>
             <a href="{{ route('users.show', ['user' => $user->id]) }}">Detalhes</a><br>
             <a href="{{ route('users.edit', ['user' => $user->id]) }}">Editar</a><br>
         </p>
     @empty
         <p>Nenhum usuário encontrado.</p>
     @endforelse
+
+    {{ $users->links() }}
 @endsection

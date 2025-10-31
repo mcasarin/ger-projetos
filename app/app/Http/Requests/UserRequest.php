@@ -25,7 +25,7 @@ class UserRequest extends FormRequest
         return [
             'name' => 'required',
             // Aqui o ternário testa se é do próprio usuário (na edição), se for, ignora o email
-            'email' => 'required|email|unique:users,email,'. ($user ? $user->id : 'NULL'),
+            'email' => 'required|email|unique:users,email,'. ($user ? $user->id : null),
             // Aqui é feita a implementação para que a senha seja opcional na edição do usuário
             'password' => 'required_if:password,!=null|min:6',
         ];

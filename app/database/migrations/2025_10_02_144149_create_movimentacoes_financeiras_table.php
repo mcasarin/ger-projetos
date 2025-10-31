@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('movimentacoes_financeiras', function (Blueprint $table) {
             $table->id();
             $table->string('descricao');
+            //$table->integer('tipo'); -- foreign key moved to another migration
             $table->decimal('valor', 15, 2);
-            $table->integer('tipo');
             $table->date('data_movimentacao');
-            $table->foreignId('project_id')->constrained('projects')->onDelete('cascade');
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
     }
 

@@ -20,6 +20,7 @@ class UserSeeder extends Seeder
                 'name' => 'Márcio',
                 'email' => 'marcio@etwas.com.br',
                 'password' => '123456A#',
+                'status' => '2',
         ]);
         }
         

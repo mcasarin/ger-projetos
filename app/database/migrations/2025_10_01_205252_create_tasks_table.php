@@ -13,11 +13,14 @@ return new class extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
-            $table->string('titulo');
-            $table->text('descricao');
-            $table->integer('status');
-            $table->unsignedBigInteger('project_id');
-            $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
+            $table->string('titutititleltelo');
+            $table->text('description');
+            $table->integer('owner_id');
+            $table->dateTime('start_date');
+            $table->dateTime('due_date');
+            // $table->integer('status'); -- foreign key moved to another migration
+            // $table->unsignedBigInteger('project_id'); -- foreign key moved to another migration
+            // $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
             $table->timestamps();
         });
     }

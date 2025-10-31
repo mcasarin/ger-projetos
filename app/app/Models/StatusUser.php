@@ -5,17 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 
-class StatusTask extends Model implements Auditable
+class StatusUser extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
 
     // nome da tabela
-    protected $table = 'status_task';
+    protected $table = 'status_user';
     // campos que podem ser preenchidos/manipulados
     protected $fillable = ['status'];
 
-    public function Task()
+    // Relacionamento com usuarios
+    public function User()
     {
-        return $this->hasMany(Task::class, 'status');
+        return $this->hasMany(User::class, 'status');
     }
 }
+
