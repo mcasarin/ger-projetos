@@ -35,6 +35,7 @@ class UsersController extends Controller
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
+                'status' => '1', // Novo
                 'password' => $request->password,
             ]);
 

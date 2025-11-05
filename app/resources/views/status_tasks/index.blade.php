@@ -1,14 +1,14 @@
 @extends('layouts.admin')
 @section('content')
-    <h2>Listagem de Status dos Projetos</h2>
+    <h2>Listagem de Status das tarefas</h2>
     <x-alert />
-    <a href="{{ route('status_projs.create') }}">Cadastrar Status</a>
-    @forelse ($status_proj as $status)
+    
+    @forelse ($status_task as $status)
         <p>
             <strong>ID:</strong> {{ $status->id }}<br>
             <strong>Nome:</strong> {{ $status->status }}<br>
         </p>
     @empty
-        <p>Nenhum status de projeto encontrado.</p>
+        <p>Nenhum status de tarefa encontrado.</p>
     @endforelse
 @endsection

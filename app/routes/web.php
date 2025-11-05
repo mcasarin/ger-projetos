@@ -3,6 +3,9 @@
 use App\Http\Controllers\ProjectsController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\StatusProjsController;
+use App\Http\Controllers\StatusTaskController;
+use App\Http\Controllers\TasksController;
+use App\Http\Controllers\MovimentsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -36,3 +39,30 @@ Route::prefix('status-proj')->group(function (){
     Route::get('/create',[StatusProjsController::class, 'create'])->name('status_projs.create');
     Route::post('/',[StatusProjsController::class, 'store'])->name('status_projs.store');
 });
+// Rotas de status das tarefas
+Route::prefix('status-task')->group(function (){
+    Route::get('/',[StatusTaskController::class, 'index'])->name('status_tasks.index');
+    Route::get('/create',[StatusTaskController::class, 'create'])->name('status_tasks.create');
+    Route::post('/',[StatusTaskController::class, 'store'])->name('status_tasks.store');
+});
+// Rotas de tasks
+Route::prefix('task')->group(function (){
+    Route::get('/',[TasksController::class, 'index'])->name('tasks.index');
+    Route::get('/create',[TasksController::class, 'create'])->name('tasks.create');
+    Route::post('/',[TasksController::class, 'store'])->name('tasks.store');
+    Route::get('/{task}',[TasksController::class, 'show'])->name('tasks.show');
+    Route::get('/{task}/edit',[TasksController::class, 'edit'])->name('tasks.edit');
+    Route::put('/{task}',[TasksController::class, 'update'])->name('tasks.update');
+    Route::delete('/{task}',[TasksController::class, 'destroy'])->name('tasks.destroy');
+});
+// Rotas de Movimentações
+Route::prefix('moviments')->group(function (){
+    Route::get('/',[MovimentsController::class, 'index'])->name('moviments.index');
+    Route::get('/create',[MovimentsController::class, 'create'])->name('moviments.create');
+    Route::post('/',[MovimentsController::class, 'store'])->name('moviments.store');
+    Route::get('/{moviment}',[MovimentsController::class, 'show'])->name('moviments.show');
+    Route::get('/{moviment}/edit',[MovimentsController::class, 'edit'])->name('moviments.edit');
+    Route::put('/{moviment}',[MovimentsController::class, 'update'])->name('moviments.update');
+    Route::delete('/{moviment}',[MovimentsController::class, 'destroy'])->name('moviments.destroy');
+});
+

@@ -4,6 +4,9 @@
     <x-alert />
 
     <a href="{{ route('projects.create') }}">Cadastrar Projeto</a>
+    <a href="{{ route('status_projs.index') }}">Listar Status de Projetos</a>
+    <a href="{{ route('tasks.index') }}">Listar Tarefas</a>
+    <a href="{{ route('moviments.index') }}">Listar Movimentações</a>
 
     @forelse ($projects as $project)
         <p>

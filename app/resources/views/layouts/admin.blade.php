@@ -11,8 +11,9 @@
     <a href="{{ route('projects.index') }}">Projetos</a><br>
     {{--<a href="{{ route('projects.create') }}">Cadastrar projetos</a><br>--}}
     <a href="{{ route('users.index') }}">Usuários</a><br>
+    <a href="{{ route('tasks.index') }}">Tarefas</a><br>
     {{--<a href="{{ route('users.create') }}">Cadastrar usuários</a><br>--}}
-    <a href="{{ route('status_projs.index') }}">Status de projetos</a><br>
+    {{-- <a href="{{ route('status_projs.index') }}">Status de projetos</a><br> --}}
     {{--<a href="{{ route('status_projs.create') }}">Cadastrar status de projetos</a><br>--}}
     
     @yield('content')
