@@ -5,6 +5,30 @@
         @csrf
         @method('POST')
         <div>
+        <label for="parent_id">Projeto Pai (Opcional):</label>
+            <select name="parent_id" id="parent_id" class="form-control">
+                
+                {{-- Opção Padrão: Sem Pai (Projeto Raiz) --}}
+                <option value="">-- Nenhum Pai (Projeto Raiz) --</option> 
+                
+                @foreach($listProjects as $parentOption)
+                    <option 
+                        value="{{ $parentOption->id }}"
+                        
+                        {{-- Lógica de Preseleção para Edição: --}}
+                        {{-- Compara o valor salvo (ou o valor de old()) com o ID do projeto atual no loop --}}
+                        @selected(old('parent_id', $project->parent_id ?? null) == $parentOption->id)
+                    >
+                        {{ $parentOption->name }}
+                    </option>
+                @endforeach
+            </select>
+            
+            @error('parent_id')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
+        </div>
+        <div>
             <label for="name">Nome do Projeto:</label>
             <input type="text" id="name" name="name" required>
         </div>
@@ -15,11 +39,11 @@
         
         <div>
             <label for="start_date">Data Inicial:</label>
-            <input type="datetime-local" id="start_date" name="start_date" required>
+            <input type="date" id="start_date" name="start_date" required>
         </div>
         <div>
             <label for="end_date">Data Final:</label>
-            <input type="datetime-local" id="end_date" name="end_date" required>
+            <input type="date" id="end_date" name="end_date" required>
         </div>
         <div>
             <label for="project_manager">Responsável pelo Projeto:</label>

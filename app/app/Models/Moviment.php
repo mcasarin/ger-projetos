@@ -4,15 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
+use App\Models\Project;
 
-class Movimentacao extends Model implements Auditable
+class Moviment extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
 
     // nome da tabela
-    protected $table = 'movimentacoes_financeira';
+    protected $table = 'financial_moviments';
     // campos que podem ser preenchidos/manipulados
-    protected $fillable = ['descricao','valor', 'tipo','data_movimentacao', 'project_id'];
+    protected $fillable = ['description','amount', 'type','moviment_date', 'project_id'];
 
     // Relacionamento com projetos
     public function projectRel()
@@ -21,8 +22,8 @@ class Movimentacao extends Model implements Auditable
     }
 
     // Relacionamento com tipo movimentacao
-    public function tipoMovimentacao()
+    public function typeMoviment()
     {
-        return $this->belongsTo(TypeMovim::class, 'tipo');
+        return $this->belongsTo(TypeMoviment::class, 'type', 'id');
     }
 }

@@ -13,7 +13,7 @@
                 <span style="color: red; font-size: 0.8em;">{{ $message }}</span>
             @enderror
         </div>
-        </div>
+        
         <div>
             <label for="description">Descrição:</label>
             <textarea id="description" name="description" required>{{ old('description', $task->description) }}</textarea>

@@ -6,6 +6,7 @@ use App\Http\Controllers\StatusProjsController;
 use App\Http\Controllers\StatusTaskController;
 use App\Http\Controllers\TasksController;
 use App\Http\Controllers\MovimentsController;
+use App\Http\Controllers\TypeMovimentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -54,6 +55,12 @@ Route::prefix('task')->group(function (){
     Route::get('/{task}/edit',[TasksController::class, 'edit'])->name('tasks.edit');
     Route::put('/{task}',[TasksController::class, 'update'])->name('tasks.update');
     Route::delete('/{task}',[TasksController::class, 'destroy'])->name('tasks.destroy');
+});
+// Rotas de tipos de movimentação
+Route::prefix('type-moviment')->group(function (){
+    Route::get('/',[TypeMovimentController::class, 'index'])->name('type_moviments.index');
+    Route::get('/create',[TypeMovimentController::class, 'create'])->name('type_moviments.create');
+    Route::post('/',[TypeMovimentController::class, 'store'])->name('type_moviments.store');
 });
 // Rotas de Movimentações
 Route::prefix('moviments')->group(function (){

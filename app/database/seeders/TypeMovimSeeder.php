@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Exception;
-use App\Models\TypeMovim;
+use App\Models\TypeMoviment;
 
 class TypeMovimSeeder extends Seeder
 {
@@ -15,14 +15,14 @@ class TypeMovimSeeder extends Seeder
     public function run(): void
     {
         try{
-            $count = TypeMovim::count();
+            $count = TypeMoviment::count();
             if($count > 0){
                 return; // Já existem registros, não faz nada
             } else {
-                $statuses = ['Entrada', 'Saída', 'Transferência'];
-                foreach($statuses as $status){
-                    TypeMovim::create([
-                        'status' => $status,
+                $tipos = ['Entrada', 'Saída', 'Transferência'];
+                foreach($tipos as $tipo){
+                    TypeMoviment::create([
+                        'type' => $tipo,
                     ]);
                 }
             }

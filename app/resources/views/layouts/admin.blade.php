@@ -15,6 +15,7 @@
     {{--<a href="{{ route('users.create') }}">Cadastrar usuários</a><br>--}}
     {{-- <a href="{{ route('status_projs.index') }}">Status de projetos</a><br> --}}
     {{--<a href="{{ route('status_projs.create') }}">Cadastrar status de projetos</a><br>--}}
+    <a href="{{ route('moviments.index') }}">Movimentações</a><br>
     
     @yield('content')
 

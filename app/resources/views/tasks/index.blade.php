@@ -30,6 +30,6 @@
     @empty
         <p>Nenhuma tarefa encontrada.</p>
     @endforelse
-
+    {{-- Paginação dos resultados --}}
     {{ $tasks->links() }}
 @endsection

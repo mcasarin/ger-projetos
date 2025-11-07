@@ -5,18 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 
-class TypeMovim extends Model implements Auditable
+class TypeMoviment extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
 
     // nome da tabela
-    protected $table = 'type_movim';
+    protected $table = 'type_moviment';
     // campos que podem ser preenchidos/manipulados
-    protected $fillable = ['tipo'];
+    protected $fillable = ['type'];
 
     //Relcaionamento com movimentacao
-    public function Movimentacao()
+    public function Moviment()
     {
-        return $this->hasMany(Movimentacao::class, 'tipo');
+        return $this->hasMany(Moviment::class, 'type');
     }
 }

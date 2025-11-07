@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('movimentacoes_financeiras', function (Blueprint $table) {
-            $table->foreignId('tipo')
-            ->after('descricao')
-            ->default(2) // Saída
-            ->constrained('type_movim')
+        Schema::table('financial_moviments', function (Blueprint $table) {
+            $table->foreignId('project_id')
+            ->after('id')
+            ->constrained('projects')
             ->onUpdate('cascade')
             ->onDelete('restrict');
         });
@@ -26,9 +25,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('movimentacoes_financeiras', function (Blueprint $table) {
-            $table->dropForeign(['tipo']);
-            $table->dropColumn('tipo');
+        Schema::table('financial_moviments', function (Blueprint $table) {
+            $table->dropForeign(['project_id']);
+            $table->dropColumn('project_id');
         });
     }
 };

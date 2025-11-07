@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('movimentacoes_financeiras', function (Blueprint $table) {
+        Schema::create('financial_moviments', function (Blueprint $table) {
             $table->id();
-            $table->string('descricao');
-            //$table->integer('tipo'); -- foreign key moved to another migration
-            $table->decimal('valor', 15, 2);
-            $table->date('data_movimentacao');
+            $table->string('description');
+            //$table->integer('type'); -- foreign key moved to another migration
+            $table->decimal('amount', 15, 2);
+            $table->date('moviment_date');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('movimentacoes_financeiras');
+        Schema::dropIfExists('financial_moviments');
     }
 };
