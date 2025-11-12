@@ -7,6 +7,7 @@ use App\Models\Project;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Exception;
 
 class TasksController extends Controller
@@ -25,7 +26,7 @@ class TasksController extends Controller
     // Detalhes da tarefa
     public function show(Task $task) {
         // Salva log
-        Log::info('Detalhes da tarefa acessados.', ['task_id' => $task->id]);
+        Log::info('Detalhes da tarefa acessados.', ['task_id' => $task->id, 'user_id' => Auth::id()]);
         $task->load('statusRelTask', 'owner');
         // Carregar a view com os detalhes do projeto
         return view('tasks.show', ['task' => $task]);
@@ -69,13 +70,13 @@ class TasksController extends Controller
                 'due_date' => $validatedData['due_date'],
             ]);
             // Salva log
-            Log::info('Novo tarefa cadastrada.', ['task_id' => $task->id]);
+            Log::info('Novo tarefa cadastrada.', ['task_id' => $task->id, 'user_id' => Auth::id()]);
             
             // Redirecionar para a lista de tarefas com uma mensagem de sucesso
             return redirect()->route('tasks.show', ['task' => $task->id])->with('success', 'Tarefa cadastrada com sucesso!');
         } catch (Exception $e) {
             // salva log de erro
-            Log::notice('Erro ao cadastrar nova tarefa [Err 1].', ['error' => $e->getMessage()]);
+            Log::notice('Erro ao cadastrar nova tarefa [Err 1].', ['error' => $e->getMessage(), 'user_id' => Auth::id()]);
         }
         // Redirecionar para a lista de tarefas com uma mensagem de erro
         return back()->withInput()->with('error', 'Tarefa não cadastrado!!! [Err 2]');
@@ -117,13 +118,13 @@ class TasksController extends Controller
                 'due_date' => $validatedData['due_date'],
             ]);
         // salva log
-        Log::info('Tarefa editada. ', ['task_id' => $task->id]);
+        Log::info('Tarefa editada. ', ['task_id' => $task->id, 'user_id' => Auth::id()]);
 
         return redirect()->route('tasks.show', ['task' => $task->id])->with('success', 'Tarefa editada com sucesso!');
 
         } catch (Exception $e) {
             // salva log de erro
-            Log::notice('Erro ao editar tarefa.', ['task_id' => $task->id, 'error' => $e->getMessage()]);
+            Log::notice('Erro ao editar tarefa.', ['task_id' => $task->id, 'error' => $e->getMessage(), 'user_id' => Auth::id()]);
             // Redirecionar para a lista de tarefas com uma mensagem de erro
             return back()->withInput()->with('error', 'Tarefa não editada!!!');
         }
@@ -133,12 +134,12 @@ class TasksController extends Controller
         try {
             $task->delete();
             // salva log
-            Log::info('Tarefa excluída.', ['task_id' => $task->id]);
+            Log::info('Tarefa excluída.', ['task_id' => $task->id, 'user_id' => Auth::id()]);
             return redirect()->route('tasks.index')->with('success', 'Tarefa excluída com sucesso!');
             
         } catch (Exception $e) {
             // salva log de erro
-            Log::notice('Erro ao excluir tarefa.', ['task_id' => $task->id, 'error' => $e->getMessage()]);
+            Log::notice('Erro ao excluir tarefa.', ['task_id' => $task->id, 'error' => $e->getMessage(), 'user_id' => Auth::id()]);
             return redirect()->route('tasks.index')->with('error', 'Erro ao excluir o tarefa.');
         }
     }

@@ -9,6 +9,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 
 class UsersController extends Controller
@@ -40,7 +41,7 @@ class UsersController extends Controller
             ]);
 
             // Salva log
-            Log::info('Novo usuário cadastrado.', ['user_id' => $user->id]);
+            Log::info('Novo usuário cadastrado.', ['usuario cadastrado' => $user->id, 'por user_id' => Auth::id()]);
         
             // Redirecionar para a lista de usuários com uma mensagem de sucesso
             return redirect()->route('users.show', ['user' => $user->id])->with('success', 'Usuário cadastrado com sucesso!');
@@ -74,13 +75,13 @@ class UsersController extends Controller
             'password' => $request->password,
         ]);
         // Salva log
-        Log::info('Usuário editado.', ['user_id' => $user->id]);
+        Log::info('Usuário editado.', ['usuario editado' => $user->id, 'por user_id' => Auth::id()]);
 
         return redirect()->route('users.show', ['user' => $user->id])->with('success', 'Usuário editado com sucesso!');
         
         } catch (Exception $e) {
             // Salva log de erro
-            Log::notice('Erro ao editar usuário.', ['user_id' => $user->id, 'error' => $e->getMessage()]);
+            Log::notice('Erro ao editar usuário.', ['usuario' => $user->id, 'error' => $e->getMessage(), 'por user_id' => Auth::id()]);
             // Redirecionar para a lista de projetos com uma mensagem de sucesso
             return back()->withInput()->with('error', 'Usuário não editado!!!');
         }
@@ -108,12 +109,12 @@ class UsersController extends Controller
                 'password' => $request->password,
             ]);
             // Salva log
-            Log::info('Senha do usuário alterada.', ['user_id' => $user->id]);
+            Log::info('Senha do usuário alterada.', ['usuario' => $user->id, 'por user_id' => Auth::id()]);
 
             return redirect()->route('users.show', ['user' => $user->id])->with('success', 'Senha alterada com sucesso!');
         } catch (Exception $e) {
             // Salva log de erro
-            Log::notice('Erro ao alterar a senha do usuário.', ['user_id' => $user->id, 'error' => $e->getMessage()]);
+            Log::notice('Erro ao alterar a senha do usuário.', ['usuario' => $user->id, 'error' => $e->getMessage(), 'user_id' => Auth::id()]);
             
             // Redirecionar para a lista de projetos com uma mensagem de sucesso
             return back()->withInput()->with('error', 'Senha não editada!!!');

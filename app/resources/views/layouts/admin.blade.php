@@ -13,9 +13,10 @@
     <a href="{{ route('users.index') }}">Usuários</a><br>
     <a href="{{ route('tasks.index') }}">Tarefas</a><br>
     {{--<a href="{{ route('users.create') }}">Cadastrar usuários</a><br>--}}
-    {{-- <a href="{{ route('status_projs.index') }}">Status de projetos</a><br> --}}
+    {{--<a href="{{ route('status_projs.index') }}">Status de projetos</a><br>--}}
     {{--<a href="{{ route('status_projs.create') }}">Cadastrar status de projetos</a><br>--}}
     <a href="{{ route('moviments.index') }}">Movimentações</a><br>
+    <a href="{{ route('logout') }}">Sair</a><br>
     
     @yield('content')
 

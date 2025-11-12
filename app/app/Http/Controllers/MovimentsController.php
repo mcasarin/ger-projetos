@@ -7,6 +7,7 @@ use App\Models\Moviment;
 use App\Models\TypeMoviment;
 use App\Models\Project;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Exception;
 
 class MovimentsController extends Controller
@@ -28,7 +29,7 @@ class MovimentsController extends Controller
         Log::info('Detalhes da movimento acessados.', ['moviment_id' => $moviment->id]);
         //$moviment->load('typeMoviment', 'typeMoviment');
         // Carregar a view com os detalhes do projeto
-        return view('moviments.show', ['moviment' => $moviment]);
+        return view('moviments.show', ['moviment' => $moviment, 'user_id' => Auth::id() ]);
     }
 
     // Formulário para criar uma nova movimentação financeira
@@ -62,13 +63,13 @@ class MovimentsController extends Controller
             $project = Project::find($moviment->project_id);
             $project->recalculateFinancials(); // Chama o método de atualização
             // Salva log
-            Log::info('Novo movimento financeiro cadastrado.', ['moviment_id' => $moviment->id]);
+            Log::info('Novo movimento financeiro cadastrado.', ['moviment_id' => $moviment->id, 'user_id' => Auth::id()]);
             
             // Redirecionar para a lista de movimentos com uma mensagem de sucesso
             return redirect()->route('moviments.show', ['moviment' => $moviment->id])->with('success', 'Movimento financeiro cadastrado com sucesso!');
         } catch (Exception $e) {
             // salva log de erro
-            Log::notice('Erro ao cadastrar novo movimento financeiro [Err 1].', ['error' => $e->getMessage()]);
+            Log::notice('Erro ao cadastrar novo movimento financeiro [Err 1].', ['error' => $e->getMessage(), 'user_id' => Auth::id()]);
         }
         // Redirecionar para a lista de movimentos com uma mensagem de erro
         return back()->withInput()->with('error', 'Movimento financeiro não cadastrado!!! [Err 2]');
@@ -105,13 +106,13 @@ class MovimentsController extends Controller
                 'project_id' => $validatedData['project_id'],
             ]);
         // salva log
-        Log::info('Movimentação editada. ', ['moviment_id' => $moviment->id]);
+        Log::info('Movimentação editada. ', ['moviment_id' => $moviment->id, 'user_id' => Auth::id()]);
 
         return redirect()->route('moviments.show', ['moviment' => $moviment->id])->with('success', 'Movimentação editada com sucesso!');
 
         } catch (Exception $e) {
             // salva log de erro
-            Log::notice('Erro ao editar a movimentação.', ['moviment_id' => $moviment->id, 'error' => $e->getMessage()]);
+            Log::notice('Erro ao editar a movimentação.', ['moviment_id' => $moviment->id, 'error' => $e->getMessage(), 'user_id' => Auth::id()]);
             // Redirecionar para a lista de movimentações com uma mensagem de erro
             return back()->withInput()->with('error', 'Movimentação não editada!!!');
         }
@@ -121,12 +122,12 @@ class MovimentsController extends Controller
         try {
             $moviment->delete();
             // salva log
-            Log::info('Movimentação excluída.', ['moviment_id' => $moviment->id]);
+            Log::info('Movimentação excluída.', ['moviment_id' => $moviment->id, 'user_id' => Auth::id()]);
             return redirect()->route('moviments.index')->with('success', 'Movimentação excluída com sucesso!');
             
         } catch (Exception $e) {
             // salva log de erro
-            Log::notice('Erro ao excluir a movimentação. [Err 1]', ['moviment_id' => $moviment->id, 'error' => $e->getMessage()]);
+            Log::notice('Erro ao excluir a movimentação. [Err 1]', ['moviment_id' => $moviment->id, 'error' => $e->getMessage(), 'user_id' => Auth::id()]);
             return redirect()->route('moviments.index')->with('error', 'Erro ao excluir a movimentação. [Err 2]');
         }
     }

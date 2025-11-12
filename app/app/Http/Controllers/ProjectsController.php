@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Models\StatusProj;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Exception;
@@ -14,7 +15,7 @@ class ProjectsController extends Controller
         // Recuperar registros do banco de dados
         $projects = Project::orderBy('id', 'asc')->paginate(5);
         // Salvando log
-        Log::info('Lista de projetos acessada.');
+        Log::info('Lista de projetos acessada.', ['user_id' => Auth::id()]);
         
         //Carregar a view
         return view('projects.index', ['projects' => $projects]);
@@ -25,7 +26,7 @@ class ProjectsController extends Controller
         // Salva log
         Log::info('Detalhes do projeto acessados.', ['project_id' => $project->id]);
         // Carregar a view com os detalhes do projeto
-        return view('projects.show', ['project' => $project]);
+        return view('projects.show', ['project' => $project, 'user_id' => Auth::id()]);
     }
 
     // Formulário para criar um novo projeto
@@ -61,12 +62,12 @@ class ProjectsController extends Controller
             // Cria o novo projeto usando os dados validados
             $project = Project::create($validatedData);
             // Salva log
-            Log::info('Novo projeto cadastrado.', ['project_id' => $project->id, 'owner_id' => $project->owner_id]);
+            Log::info('Novo projeto cadastrado.', ['project_id' => $project->id, 'user_id' => Auth::id()]);
         
             return redirect()->route('projects.show', ['project' => $project->id])->with('success', 'Projeto cadastrado com sucesso!');
         } catch (Exception $e) {
             // Salva log de erro de PERSISTÊNCIA (após a validação)
-            Log::notice('Erro ao cadastrar novo projeto (Erro de persistência).', ['error' => $e->getMessage(), 'data' => $validatedData]);
+            Log::notice('Erro ao cadastrar novo projeto (Erro de persistência).', ['error' => $e->getMessage(), 'data' => $validatedData, 'user_id' => Auth::id()]);
             
             return back()->withInput()->with('error', 'Projeto não cadastrado!!!');
         }
@@ -111,7 +112,7 @@ class ProjectsController extends Controller
         $project->update($validatedData);
         
         // salva log
-        Log::info('Projeto editado.', ['project_id' => $project->id]);
+        Log::info('Projeto editado =>', ['project_id' => $project->id, 'usuário_id' => Auth::id()]);
 
         return redirect()->route('projects.show', ['project' => $project->id])->with('success', 'Projeto editado com sucesso!');
 
@@ -128,10 +129,10 @@ class ProjectsController extends Controller
             $project->delete();
             return redirect()->route('projects.index')->with('success', 'Projeto excluído com sucesso!');
             // salva log
-            Log::info('Projeto excluído.', ['project_id' => $project->id]);
+            Log::info('Projeto excluído.', ['project_id' => $project->id, 'user_id' => Auth::id()]);
         } catch (Exception $e) {
             // salva log de erro
-            Log::notice('Erro ao excluir projeto.', ['project_id' => $project->id, 'error' => $e->getMessage()]);
+            Log::notice('Erro ao excluir projeto.', ['project_id' => $project->id, 'user_id' => Auth::id(), 'error' => $e->getMessage()]);
             return redirect()->route('projects.index')->with('error', 'Erro ao excluir o projeto.');
         }
     }
