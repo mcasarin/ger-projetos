@@ -12,6 +12,6 @@
     <button type="submit">Acessar</button>
 </form>
 <br><br>
-<a href="#">Esqueceu a senha?</a><br>
-<a href="#">Criar uma conta</a>
+<a href="{{ route('password.request') }}">Esqueceu a senha?</a><br>
+
 @endsection

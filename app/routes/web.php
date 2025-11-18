@@ -10,8 +10,11 @@ use App\Http\Controllers\TypeMovimentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProfilesController;
+use App\Http\Controllers\ForgotPasswordController;
 use Illuminate\Support\Facades\Route;
 
+// Rotas publicas
 // Home
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -21,11 +24,30 @@ Route::get('/login', [AuthController::class, 'index'])->name('login');
 Route::post('/login', [AuthController::class, 'loginProcess'])->name('login.process');
 // Logout
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+// Solicitar Link de reset de senha
+Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+// Backend de solicitação de link de reset de senha
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 
-// grupo de rotas protegidas por autenticação
+// Formulário de reset de senha
+Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'showResetForm'])->name('password.reset');
+// Backend de gravação de senha alterada
+Route::post('/reset-password', [ForgotPasswordController::class, 'reset'])->name('password.update');
+
+
+// Grupo de rotas protegidas por autenticação
 Route::middleware(['auth'])->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+
+    // Rotas de Profile
+    Route::prefix('profile')->group(function (){
+        Route::get('/',[ProfilesController::class, 'show'])->name('profiles.show');
+        Route::get('/{user}/edit',[ProfilesController::class, 'edit'])->name('profiles.edit');
+        Route::put('/{user}',[ProfilesController::class, 'update'])->name('profiles.update');
+        Route::get('/{user}/edit-password',[ProfilesController::class, 'editPassword'])->name('profiles.edit_password');
+        Route::put('/{user}/update-password',[ProfilesController::class, 'updatePassword'])->name('profiles.update_password');
+    });
 
     // Projetos Rota de projetos agrupados, refatorada com prefixo
     Route::prefix('project')->group(function (){
