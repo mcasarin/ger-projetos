@@ -1,0 +1,12 @@
+{
+  "name": "ger-projetos",
+  "version": "1.0.0",
+  "description": "Gerenciador de projetos",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
