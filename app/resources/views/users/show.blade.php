@@ -9,6 +9,18 @@
             <strong>Nome:</strong> {{ $user->name }}<br>
             <strong>Email:</strong> {{ $user->email }}<br>
             <strong>Status:</strong> {{ $user->statusUser ? $user->statusUser->status : 'N/A' }}<br>
+            <strong>Papel:</strong> 
+            @forelse ($user->getRoleNames() as $index => $role)
+                @if (!$loop->last)
+                    {{ $role }},
+                @else
+                    {{ $role }}
+                @endif
+
+            @empty
+                N/A // Caso o usuário não tenha nenhum papel atribuído
+            @endforelse
+            <br>
             <strong>Criado em:</strong> {{ \Carbon\Carbon::parse($user->created_at)->format('d/m/Y H:i:s') }}<br>
             <strong>Atualizado em:</strong> {{ \Carbon\Carbon::parse($user->updated_at)->format('d/m/Y H:i:s') }}<br><br>
             <a href="{{ route('users.edit_password', ['user' => $user->id]) }}">Mudar Senha</a><br>

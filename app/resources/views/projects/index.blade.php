@@ -2,8 +2,9 @@
 @section('content')
     <h2>Lista de Projetos</h2>
     <x-alert />
-
+    @can('create-project')
     <a href="{{ route('projects.create') }}">Cadastrar Projeto</a>
+    @endcan
     <a href="{{ route('status_projs.index') }}">Listar Status de Projetos</a>
     <a href="{{ route('tasks.index') }}">Listar Tarefas</a>
     <a href="{{ route('moviments.index') }}">Listar Movimentações</a>
@@ -19,11 +20,13 @@
             <strong>Status:</strong> {{ $project->statusRel->status ?? 'Não definido' }}<br>
             <a href="{{ route('projects.show', ['project' => $project->id]) }}">Detalhes</a><br>
             <a href="{{ route('projects.edit', ['project' => $project->id]) }}">Editar</a><br>
+            @can('destroy-project')
             <form action="{{ route('projects.destroy', $project->id) }}" method="POST" style="display:inline;">
                 @csrf
                 @method('DELETE')
                 <button type="submit" onclick="return confirm('Tem certeza que deseja excluir este projeto?')">Excluir</button>
             </form>
+            @endcan
         </p>
         <hr>
     @empty

@@ -29,7 +29,7 @@ class StatusTaskSeeder extends Seeder
             }
             }catch(Exception $e){
             // Tratar erro de duplicidade ou outro erro
-            Log::error('Erro ao criar status: ' . $e->getMessage());
+            Log::error('Erro ao criar status pela Seeder: ' . $e->getMessage());
         }
     }
 }

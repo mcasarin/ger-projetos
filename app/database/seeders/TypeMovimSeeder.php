@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Exception;
 use App\Models\TypeMoviment;
+use Illuminate\Support\Facades\Log;
 
 class TypeMovimSeeder extends Seeder
 {
@@ -28,7 +28,7 @@ class TypeMovimSeeder extends Seeder
             }
             }catch(Exception $e){
             // Tratar erro de duplicidade ou outro erro
-            // Log::error('Erro ao criar status: ' . $e->getMessage());
+            Log::error('Erro ao criar status pela Seeder: ' . $e->getMessage());
         }
     }
 }

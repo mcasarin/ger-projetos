@@ -6,6 +6,7 @@ use App\Http\Requests\UserPasswordRequest;
 use App\Http\Requests\UserRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Spatie\Permission\Models\Role;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -26,8 +27,11 @@ class UsersController extends Controller
     }
 
     public function create() {
+        // recupera e atribui papeis
+        $roles = Role::pluck('name')->all();
+
         //Carregar a view
-        return view('users.create');
+        return view('users.create', ['roles' => $roles]);
     }
     public function store(UserRequest $request) {
         // dd($request->all()); // Imprime todos os dados recebidos do formulário
@@ -39,6 +43,12 @@ class UsersController extends Controller
                 'status' => '1', // Novo
                 'password' => $request->password,
             ]);
+            // Atribuir papeis ao usuário
+            if ($request->filled('roles')) {
+                $validRoles = Role::whereIn('name', $request->roles)->pluck('name')->toArray();
+                // atribuir papeis validos
+                $user->syncRoles($validRoles);
+            }
 
             // Salva log
             Log::info('Novo usuário cadastrado.', ['usuario cadastrado' => $user->id, 'por user_id' => Auth::id()]);
@@ -61,8 +71,16 @@ class UsersController extends Controller
     }
 
     public function edit(User $user) {
+        // Recupera os papéis
+        $roles = Role::pluck('name')->all();
+        // Recupera papeis do usuário
+        $userRole = $user->roles->pluck('name')->toArray();
         // Carregar a view com o formulário de edição
-        return view('users.edit', ['user' => $user]);
+        return view('users.edit', [
+            'user' => $user, 
+            'roles' => $roles, 
+            'userRole' => $userRole
+        ]);
     }
 
     public function update(UserRequest $request, User $user) {
@@ -72,8 +90,20 @@ class UsersController extends Controller
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => $request->password,
         ]);
+
+        // Se houver papeis selecionados, sincroniza os papeis do usuário
+        if ($request->filled('roles')) {
+            // Atribuir papeis ao usuário
+            if ($request->filled('roles')) {
+                $validRoles = Role::whereIn('name', $request->roles)->pluck('name')->toArray();
+                // atribuir papeis validos
+                $user->syncRoles($validRoles);
+            }
+        } else {
+            // Se nenhum papel for selecionado, remove todos os papeis do usuário
+            $user->syncRoles([]);
+        }
         // Salva log
         Log::info('Usuário editado.', ['usuario editado' => $user->id, 'por user_id' => Auth::id()]);
 

@@ -12,6 +12,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfilesController;
 use App\Http\Controllers\ForgotPasswordController;
+use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Route;
 
 // Rotas publicas
@@ -49,32 +50,32 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/{user}/update-password',[ProfilesController::class, 'updatePassword'])->name('profiles.update_password');
     });
 
-    // Projetos Rota de projetos agrupados, refatorada com prefixo
+    // Projetos Rota de projetos agrupados, refatorada com prefixo, refatorada para usar middleware de permissão
     Route::prefix('project')->group(function (){
-        Route::get('/',[ProjectsController::class, 'index'])->name('projects.index');
-        Route::get('/create',[ProjectsController::class, 'create'])->name('projects.create');
-        Route::post('/',[ProjectsController::class, 'store'])->name('projects.store');
-        Route::get('/{project}',[ProjectsController::class, 'show'])->name('projects.show');
-        Route::get('/{project}/edit',[ProjectsController::class, 'edit'])->name('projects.edit');
-        Route::put('/{project}',[ProjectsController::class, 'update'])->name('projects.update');
-        Route::delete('/{project}',[ProjectsController::class, 'destroy'])->name('projects.destroy');
+        Route::get('/',[ProjectsController::class, 'index'])->name('projects.index')->middleware('permission:index-projects');
+        Route::get('/create',[ProjectsController::class, 'create'])->name('projects.create')->middleware('permission:create-projects');
+        Route::post('/',[ProjectsController::class, 'store'])->name('projects.store')->middleware('permission:create-projects');
+        Route::get('/{project}',[ProjectsController::class, 'show'])->name('projects.show')->middleware('permission:show-projects');
+        Route::get('/{project}/edit',[ProjectsController::class, 'edit'])->name('projects.edit')->middleware('permission:edit-projects');
+        Route::put('/{project}',[ProjectsController::class, 'update'])->name('projects.update')->middleware('permission:edit-projects');
+        Route::delete('/{project}',[ProjectsController::class, 'destroy'])->name('projects.destroy')->middleware('permission:destroy-projects');
     });
     // Rotas de usuários
     Route::prefix('user')->group(function (){
-        Route::get('/',[UsersController::class, 'index'])->name('users.index');
-        Route::get('/create',[UsersController::class, 'create'])->name('users.create');
-        Route::post('/',[UsersController::class, 'store'])->name('users.store');
-        Route::get('/{user}',[UsersController::class, 'show'])->name('users.show');
-        Route::get('/{user}/edit',[UsersController::class, 'edit'])->name('users.edit');
-        Route::put('/{user}',[UsersController::class, 'update'])->name('users.update');
-        Route::get('/{user}/edit-password',[UsersController::class, 'editPassword'])->name('users.edit_password');
-        Route::put('/{user}/update-password',[UsersController::class, 'updatePassword'])->name('users.update_password');
+        Route::get('/',[UsersController::class, 'index'])->name('users.index')->middleware('permission:index-users');
+        Route::get('/create',[UsersController::class, 'create'])->name('users.create')->middleware('permission:create-users');
+        Route::post('/',[UsersController::class, 'store'])->name('users.store')->middleware('permission:create-users');
+        Route::get('/{user}',[UsersController::class, 'show'])->name('users.show')->middleware('permission:show-users');
+        Route::get('/{user}/edit',[UsersController::class, 'edit'])->name('users.edit')->middleware('permission:edit-users');
+        Route::put('/{user}',[UsersController::class, 'update'])->name('users.update')->middleware('permission:edit-users');
+        Route::get('/{user}/edit-password',[UsersController::class, 'editPassword'])->name('users.edit_password')->middleware('permission:edit-users-password');
+        Route::put('/{user}/update-password',[UsersController::class, 'updatePassword'])->name('users.update_password')->middleware('permission:edit-users-password');
     });
     // Rotas de status dos projetos
     Route::prefix('status-proj')->group(function (){
-        Route::get('/',[StatusProjsController::class, 'index'])->name('status_projs.index');
-        Route::get('/create',[StatusProjsController::class, 'create'])->name('status_projs.create');
-        Route::post('/',[StatusProjsController::class, 'store'])->name('status_projs.store');
+        Route::get('/',[StatusProjsController::class, 'index'])->name('status_projs.index')->middleware('permission:index-status-projs');
+        Route::get('/create',[StatusProjsController::class, 'create'])->name('status_projs.create')->middleware('permission:create-status-projs');
+        Route::post('/',[StatusProjsController::class, 'store'])->name('status_projs.store')->middleware('permission:create-status-projs');
     });
     // Rotas de status das tarefas
     Route::prefix('status-task')->group(function (){
@@ -84,28 +85,28 @@ Route::middleware(['auth'])->group(function () {
     });
     // Rotas de tasks
     Route::prefix('task')->group(function (){
-        Route::get('/',[TasksController::class, 'index'])->name('tasks.index');
-        Route::get('/create',[TasksController::class, 'create'])->name('tasks.create');
-        Route::post('/',[TasksController::class, 'store'])->name('tasks.store');
-        Route::get('/{task}',[TasksController::class, 'show'])->name('tasks.show');
-        Route::get('/{task}/edit',[TasksController::class, 'edit'])->name('tasks.edit');
-        Route::put('/{task}',[TasksController::class, 'update'])->name('tasks.update');
-        Route::delete('/{task}',[TasksController::class, 'destroy'])->name('tasks.destroy');
+        Route::get('/',[TasksController::class, 'index'])->name('tasks.index')->middleware('permission:index-tasks');
+        Route::get('/create',[TasksController::class, 'create'])->name('tasks.create')->middleware('permission:create-tasks');
+        Route::post('/',[TasksController::class, 'store'])->name('tasks.store')->middleware('permission:create-tasks');
+        Route::get('/{task}',[TasksController::class, 'show'])->name('tasks.show')->middleware('permission:show-tasks');
+        Route::get('/{task}/edit',[TasksController::class, 'edit'])->name('tasks.edit')->middleware('permission:edit-tasks');
+        Route::put('/{task}',[TasksController::class, 'update'])->name('tasks.update')->middleware('permission:edit-tasks');
+        Route::delete('/{task}',[TasksController::class, 'destroy'])->name('tasks.destroy')->middleware('permission:destroy-tasks');
     });
     // Rotas de tipos de movimentação
     Route::prefix('type-moviment')->group(function (){
-        Route::get('/',[TypeMovimentController::class, 'index'])->name('type_moviments.index');
-        Route::get('/create',[TypeMovimentController::class, 'create'])->name('type_moviments.create');
-        Route::post('/',[TypeMovimentController::class, 'store'])->name('type_moviments.store');
+        Route::get('/',[TypeMovimentController::class, 'index'])->name('type_moviments.index')->middleware('permission:index-type-moviments');
+        Route::get('/create',[TypeMovimentController::class, 'create'])->name('type_moviments.create')->middleware('permission:create-type-moviments');
+        Route::post('/',[TypeMovimentController::class, 'store'])->name('type_moviments.store')->middleware('permission:create-type-moviments');
     });
     // Rotas de Movimentações
     Route::prefix('moviments')->group(function (){
-        Route::get('/',[MovimentsController::class, 'index'])->name('moviments.index');
-        Route::get('/create',[MovimentsController::class, 'create'])->name('moviments.create');
-        Route::post('/',[MovimentsController::class, 'store'])->name('moviments.store');
-        Route::get('/{moviment}',[MovimentsController::class, 'show'])->name('moviments.show');
-        Route::get('/{moviment}/edit',[MovimentsController::class, 'edit'])->name('moviments.edit');
-        Route::put('/{moviment}',[MovimentsController::class, 'update'])->name('moviments.update');
-        Route::delete('/{moviment}',[MovimentsController::class, 'destroy'])->name('moviments.destroy');
+        Route::get('/',[MovimentsController::class, 'index'])->name('moviments.index')->middleware('permission:index-moviments');
+        Route::get('/create',[MovimentsController::class, 'create'])->name('moviments.create')->middleware('permission:create-moviments');
+        Route::post('/',[MovimentsController::class, 'store'])->name('moviments.store')->middleware('permission:create-moviments');
+        Route::get('/{moviment}',[MovimentsController::class, 'show'])->name('moviments.show')->middleware('permission:show-moviments');
+        Route::get('/{moviment}/edit',[MovimentsController::class, 'edit'])->name('moviments.edit')->middleware('permission:edit-moviments');
+        Route::put('/{moviment}',[MovimentsController::class, 'update'])->name('moviments.update')->middleware('permission:edit-moviments');
+        Route::delete('/{moviment}',[MovimentsController::class, 'destroy'])->name('moviments.destroy')->middleware('permission:destroy-moviments');
     });
 });

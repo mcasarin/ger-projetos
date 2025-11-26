@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\StatusProj;
 use Illuminate\Database\Seeder;
 use Exception;
+use Illuminate\Support\Facades\Log;
 
 class StatusProjSeeder extends Seeder
 {
@@ -28,7 +28,7 @@ class StatusProjSeeder extends Seeder
             }
             }catch(Exception $e){
             // Tratar erro de duplicidade ou outro erro
-            // Log::error('Erro ao criar status: ' . $e->getMessage());
+            Log::error('Erro ao criar status: ' . $e->getMessage());
         }
     }
 }

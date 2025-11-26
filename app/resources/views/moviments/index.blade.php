@@ -2,9 +2,12 @@
 @section('content')
     <h2>Lista de Movimentações Financeiras</h2>
     <x-alert />
-
+    @can('create-moviments')
     <a href="{{ route('moviments.create') }}">Cadastrar Movimento</a>
+    @endcan
+    @can('index-type-moviments')
     <a href="{{ route('type_moviments.index') }}">Listar Tipos de Movimentação</a>
+    @endcan
     
 
     @forelse ($moviments as $moviment)
