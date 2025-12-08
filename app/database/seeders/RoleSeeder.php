@@ -50,6 +50,18 @@ class RoleSeeder extends Seeder
             'create-moviments',
             'edit-moviments',
             'destroy-moviments',
+            'index-roles',
+            'show-roles',
+            'create-roles',
+            'edit-roles',
+            'destroy-roles',
+            'index-role-permission',
+            'update-role-permission',
+            'index-permissions',
+            'show-permissions',
+            'create-permissions',
+            'edit-permissions',
+            'destroy-permissions',
         ]);
 
         // User

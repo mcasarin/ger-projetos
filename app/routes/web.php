@@ -12,7 +12,9 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfilesController;
 use App\Http\Controllers\ForgotPasswordController;
-use GuzzleHttp\Middleware;
+use App\Http\Controllers\RolesController;
+use App\Http\Controllers\RolePermissionController;
+use App\Http\Controllers\PermissionsController;
 use Illuminate\Support\Facades\Route;
 
 // Rotas publicas
@@ -108,5 +110,33 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{moviment}/edit',[MovimentsController::class, 'edit'])->name('moviments.edit')->middleware('permission:edit-moviments');
         Route::put('/{moviment}',[MovimentsController::class, 'update'])->name('moviments.update')->middleware('permission:edit-moviments');
         Route::delete('/{moviment}',[MovimentsController::class, 'destroy'])->name('moviments.destroy')->middleware('permission:destroy-moviments');
+    });
+    // Rotas de Papeis
+    Route::prefix('roles')->group(function (){
+        Route::get('/',[RolesController::class, 'index'])->name('roles.index')->middleware('permission:index-roles');
+        Route::get('/create',[RolesController::class, 'create'])->name('roles.create')->middleware('permission:create-roles');
+        Route::post('/',[RolesController::class, 'store'])->name('roles.store')->middleware('permission:create-roles');
+        Route::get('/{role}',[RolesController::class, 'show'])->name('roles.show')->middleware('permission:show-roles');
+        Route::get('/{role}/edit',[RolesController::class, 'edit'])->name('roles.edit')->middleware('permission:edit-roles');
+        Route::put('/{role}',[RolesController::class, 'update'])->name('roles.update')->middleware('permission:edit-roles');
+        Route::delete('/{role}',[RolesController::class, 'destroy'])->name('roles.destroy')->middleware('permission:destroy-roles');
+    });
+
+    
+    // Rotas de Papeis e Permissões vinculadas
+    Route::prefix('role-permissions')->group(function (){
+        Route::get('/{role}',[RolePermissionController::class, 'index'])->name('role-permission.index')->middleware('permission:index-role-permission');
+        Route::get('/{role}/{permission}',[RolePermissionController::class, 'update'])->name('role-permission.update')->middleware('permission:update-role-permission');
+    });
+
+    // Permissões de papeis
+    Route::prefix('permissions')->group(function (){
+        Route::get('/',[PermissionsController::class, 'index'])->name('permissions.index')->middleware('permission:index-permissions');
+        Route::get('/create',[PermissionsController::class, 'create'])->name('permissions.create')->middleware('permission:create-permissions');
+        Route::post('/',[PermissionsController::class, 'store'])->name('permissions.store')->middleware('permission:create-permissions');
+        Route::get('/{permission}',[PermissionsController::class, 'show'])->name('permissions.show')->middleware('permission:show-permissions');
+        Route::get('/{permission}/edit',[PermissionsController::class, 'edit'])->name('permissions.edit')->middleware('permission:edit-permissions');
+        Route::put('/{permission}',[PermissionsController::class, 'update'])->name('permissions.update')->middleware('permission:edit-permissions');
+        Route::delete('/{permission}',[PermissionsController::class, 'destroy'])->name('permissions.destroy')->middleware('permission:destroy-permissions');
     });
 });

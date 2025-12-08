@@ -142,3 +142,7 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 >>>>>>> a4abaae2d4d63383ab1c3e555dbc6364fadfd334
+
+# Laravel specific ignores
+*.log
+clean-cache.sh
