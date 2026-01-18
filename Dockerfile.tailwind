@@ -1,0 +1,10 @@
+FROM node:22-alpine
+
+# Atualiza npm para a versão desejada
+RUN npm install -g npm@11.7.0
+
+# Dependências úteis (opcional, mas recomendável)
+RUN apk add --no-cache bash
+
+WORKDIR /app
+

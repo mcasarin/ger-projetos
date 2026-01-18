@@ -1,17 +1,24 @@
 @extends('layouts.login')
 @section('content')
-<h3>Área restrita</h3>
+<h1 class="title-login">Área restrita</h1>
 <x-alert />
-<form method="POST" action="{{ route('login.process') }}">
+<form class="mt-4" method="POST" action="{{ route('login.process') }}">
     @csrf
     @method('POST')
-    <label for="email">E-mail:</label><br>
-    <input type="email" name="email" id="email" value="{{ old('email') }}"><br><br>
-    <label for="password">Senha:</label><br>
-    <input type="password" name="password" id="password" value="{{ old('password') }}"><br><br>
-    <button type="submit">Acessar</button>
+    <div class="form-group-login">
+        <label for="email" class="form-label-login">E-mail:</label>
+        <input type="email" class="form-input-login" name="email" id="email" value="{{ old('email') }}">
+    </div>
+    <div class="form-group-login">
+        <label for="password" class="form-label-login">Senha:</label>
+        <input type="password" class="form-input-login" name="password" id="password" value="{{ old('password') }}">
+    </div>
+    <div class="btn-group-login">
+        <a href="{{ route('password.request') }}">Esqueceu a senha?</a>
+        <button type="submit" class="btn-primary-md">Acessar</button>
+    </div>
+    
 </form>
-<br><br>
-<a href="{{ route('password.request') }}">Esqueceu a senha?</a><br>
+
 
 @endsection
