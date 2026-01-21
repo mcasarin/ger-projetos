@@ -20,7 +20,7 @@ class TasksController extends Controller
         Log::info('Lista de tarefas acessada.');
         
         //Carregar a view
-        return view('tasks.index', ['tasks' => $tasks]);
+        return view('tasks.index', ['menu' => 'tasks', 'tasks' => $tasks]);
     }
     
     // Detalhes da tarefa
@@ -29,7 +29,7 @@ class TasksController extends Controller
         Log::info('Detalhes da tarefa acessados.', ['task_id' => $task->id, 'user_id' => Auth::id()]);
         $task->load('statusRelTask', 'owner');
         // Carregar a view com os detalhes do projeto
-        return view('tasks.show', ['task' => $task]);
+        return view('tasks.show', ['menu' => 'tasks', 'task' => $task]);
     }
 
     // Formulário para criar uma nova tarefa
@@ -39,6 +39,7 @@ class TasksController extends Controller
         $listProjects = Project::all();
         $listUsers = User::all();
         return view('tasks.create', [
+            'menu' => 'tasks',
             'statusTasks' => $statusTasks, 
             'listProjects' => $listProjects,
             'listUsers' => $listUsers
@@ -89,6 +90,7 @@ class TasksController extends Controller
         $listProjects = Project::all();
         $listUsers = User::all();
         return view('tasks.edit', [
+            'menu' => 'tasks',
             'task' => $task,
             'statusTasks' => $statusTasks, 
             'listProjects' => $listProjects,

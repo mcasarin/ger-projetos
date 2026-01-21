@@ -17,13 +17,13 @@ class UsersController extends Controller
 {
     public function index(User $user) {
         // Recupera os registros do banco de dados
-        $users = User::orderBy('id', 'asc')->paginate(5);
+        $users = User::orderBy('id', 'asc')->paginate(2);
 
         // Salvar log
         Log::info('Lista de usuários acessada.');
 
         //Carregar a view
-        return view('users.index',['users' => $users]);
+        return view('users.index',['menu' => 'users', 'users' => $users]);
     }
 
     public function create() {
@@ -31,7 +31,7 @@ class UsersController extends Controller
         $roles = Role::pluck('name')->all();
 
         //Carregar a view
-        return view('users.create', ['roles' => $roles]);
+        return view('users.create', ['menu' => 'users', 'roles' => $roles]);
     }
     public function store(UserRequest $request) {
         // dd($request->all()); // Imprime todos os dados recebidos do formulário
@@ -67,7 +67,7 @@ class UsersController extends Controller
         Log::info('Detalhes do usuário acessados.', ['user_id' => $user->id]);
 
         // Carregar a view com os detalhes do projeto
-        return view('users.show', ['user' => $user]);
+        return view('users.show', ['menu' => 'users', 'user' => $user]);
     }
 
     public function edit(User $user) {
@@ -77,6 +77,7 @@ class UsersController extends Controller
         $userRole = $user->roles->pluck('name')->toArray();
         // Carregar a view com o formulário de edição
         return view('users.edit', [
+            'menu' => 'users',
             'user' => $user, 
             'roles' => $roles, 
             'userRole' => $userRole
@@ -119,7 +120,7 @@ class UsersController extends Controller
     // Formulário para editar a senha do usuário
     public function editPassword(User $user) {
         // Carregar a view com o formulário de edição
-        return view('users.edit_password', ['user' => $user]);
+        return view('users.edit_password', ['menu' => 'users', 'user' => $user]);
     }
 
     public function updatePassword(UserPasswordRequest $request, User $user) {

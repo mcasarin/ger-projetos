@@ -18,7 +18,7 @@ class ProjectsController extends Controller
         Log::info('Lista de projetos acessada.', ['user_id' => Auth::id()]);
         
         //Carregar a view
-        return view('projects.index', ['projects' => $projects]);
+        return view('projects.index', ['menu' => 'projects', 'projects' => $projects]);
     }
     
     // Detalhes do projeto
@@ -26,7 +26,7 @@ class ProjectsController extends Controller
         // Salva log
         Log::info('Detalhes do projeto acessados.', ['project_id' => $project->id]);
         // Carregar a view com os detalhes do projeto
-        return view('projects.show', ['project' => $project, 'user_id' => Auth::id()]);
+        return view('projects.show', ['menu' => 'projects', 'project' => $project, 'user_id' => Auth::id()]);
     }
 
     // Formulário para criar um novo projeto
@@ -81,6 +81,7 @@ class ProjectsController extends Controller
         $listProjects = Project::where('id', '!=', $project->id)->get();
         // Carregar a view com o formulário de edição
         return view('projects.edit', [
+            'menu' => 'projects',
             'project' => $project,
             'listProjects' => $listProjects, // Passar a lista para a view
             'statusProj' => $statusProj,

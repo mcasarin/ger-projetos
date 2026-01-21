@@ -20,7 +20,7 @@ class PermissionsController extends Controller
         Log::info('Listar as permissões.', ['action_user_id' => Auth::id()]);
 
         // Carregar a view 
-        return view('permissions.index', ['permissions' => $permissions]);
+        return view('permissions.index', ['menu' => 'permissions', 'permissions' => $permissions]);
     }
 
     // Visualizar os detalhes do papel
@@ -30,7 +30,7 @@ class PermissionsController extends Controller
         Log::info('Visualizar a permissão.', ['permission_id' => $permission->id, 'action_user_id' => Auth::id()]);
 
         // Carregar a view 
-        return view('permissions.show', ['permission' => $permission]);
+        return view('permissions.show', ['menu' => 'permissions', 'permission' => $permission]);
     }
 
     // Carregar o formulário cadastrar novo papel

@@ -20,7 +20,7 @@ class MovimentsController extends Controller
         Log::info('Lista de movimentações financeiras acessada.');
         
         //Carregar a view
-        return view('moviments.index', ['moviments' => $moviments]);
+        return view('moviments.index', ['menu' => 'moviments', 'moviments' => $moviments]);
     }
     
     // Detalhes da movimento
@@ -29,7 +29,7 @@ class MovimentsController extends Controller
         Log::info('Detalhes da movimento acessados.', ['moviment_id' => $moviment->id]);
         //$moviment->load('typeMoviment', 'typeMoviment');
         // Carregar a view com os detalhes do projeto
-        return view('moviments.show', ['moviment' => $moviment, 'user_id' => Auth::id() ]);
+        return view('moviments.show', ['menu' => 'moviments', 'moviment' => $moviment, 'user_id' => Auth::id() ]);
     }
 
     // Formulário para criar uma nova movimentação financeira
@@ -82,6 +82,7 @@ class MovimentsController extends Controller
         $listProjects = Project::all();
         $listTypes = TypeMoviment::all();
         return view('moviments.edit', [
+            'menu' => 'moviments',
             'moviment' => $moviment,
             'listProjects' => $listProjects,
             'listTypes' => $listTypes

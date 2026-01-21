@@ -20,7 +20,7 @@ class RolesController extends Controller
         Log::info('Listar os papéis.', ['action_user_id' => Auth::id()]);
 
         // Carregar a view 
-        return view('roles.index', ['roles' => $roles]);
+        return view('roles.index', ['menu' => 'roles', 'roles' => $roles]);
     }
 
     // Visualizar os detalhes do papel
@@ -82,7 +82,7 @@ class RolesController extends Controller
     public function edit(Role $role)
     {
         // Carregar a view 
-        return view('roles.edit', ['role' => $role]);
+        return view('roles.edit', ['menu' => 'roles', 'role' => $role]);
     }
 
     // Editar no banco de dados o papel

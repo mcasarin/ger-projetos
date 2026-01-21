@@ -1,6 +1,28 @@
 @extends('layouts.admin')
 @section('content')
-    <h2>Dashboard</h2>
-    <x-alert />
+
+    <!-- Título e Trilha de Navegação -->
+            <div class="content-wrapper">
+                <div class="content-header">
+                    <h2 class="content-title">Dashboard</h2>
+                    <nav class="breadcrumb">
+                        <span>Dashboard</span>
+                    </nav>
+                </div>
+            </div>
+            <div class="content-box">
+                <div class="content-box-header">
+                    <h3 class="content-box-title">Página Inicial</h3>
+                    <div class="content-box-btn"></div>
+                </div>
+
+                <!-- Alertas -->
+                <x-alert />
+
+                <div class="content-box-body">
+                    Bem-vindo ...!
+                </div>
+            </div>
+    
     
 @endsection
