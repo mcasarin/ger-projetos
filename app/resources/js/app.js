@@ -70,3 +70,21 @@ document.addEventListener("DOMContentLoaded", function () {
         updateIcons(); // Atualiza os ícones após alterar o tema
     });
 });
+
+// SweetAlert2 para mensagens de confirmação de exclusão
+window.confirmDelete = function (id) {
+    Swal.fire({
+  title: "Você tem certeza?",
+  text: "Essa ação não pode ser desfeita!",
+  icon: "warning",
+  showCancelButton: true,
+  confirmButtonColor: "#d33",
+  cancelButtonColor: "#028529",
+  confirmButtonText: "Sim, pode excluir!",
+  cancelButtonText: "Não, cancelar!"
+}).then((result) => {
+  if (result.isConfirmed) {
+    document.getElementById(`delete-form-${id}`).submit();
+  }
+});
+}

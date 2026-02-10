@@ -1,15 +1,16 @@
 @extends('layouts.admin')
+
 @section('content')
     <!-- Título e Trilha de Navegação -->
     <div class="content-wrapper">
         <div class="content-header">
-            <h2 class="content-title">Permissão</h2>
+            <h2 class="content-title">Status Usuário</h2>
             <nav class="breadcrumb">
                 <a href="{{ route('dashboard.index') }}" class="breadcrumb-link">Dashboard</a>
                 <span>/</span>
-                <a href="{{ route('permissions.index') }}" class="breadcrumb-link">Permissões</a>
+                <a href="{{ route('user_statuses.index') }}" class="breadcrumb-link">Status</a>
                 <span>/</span>
-                <span>Permissão</span>
+                <span>Status</span>
             </nav>
         </div>
     </div>
@@ -18,8 +19,8 @@
         <div class="content-box-header">
             <h3 class="content-box-title">Detalhes</h3>
             <div class="content-box-btn">
-                @can('index-permission')
-                    <a href="{{ route('permissions.index') }}" class="btn-info align-icon-btn">
+                @can('index-user-status')
+                    <a href="{{ route('user_statuses.index') }}" class="btn-info align-icon-btn">
                         <!-- Ícone queue-list (Heroicons) -->
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-5">
@@ -30,8 +31,8 @@
                     </a>
                 @endcan
 
-                @can('edit-permission')
-                    <a href="{{ route('permissions.edit', ['permission' => $permission->id]) }}" class="btn-warning align-icon-btn">
+                @can('edit-user-status')
+                    <a href="{{ route('user_statuses.edit', ['userStatus' => $userStatus->id]) }}" class="btn-warning align-icon-btn">
                         <!-- Ícone pencil-square (Heroicons) -->
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-5">
@@ -42,12 +43,12 @@
                     </a>
                 @endcan
 
-                @can('destroy-permission')
-                    <form id="delete-form-{{ $permission->id }}" action="{{ route('permissions.destroy', ['permission' => $permission->id]) }}" method="POST">
+                @can('destroy-user-status')
+                    <form action="{{ route('user_statuses.destroy', ['userStatus' => $userStatus->id]) }}" method="POST">
                         @csrf
                         @method('delete')
 
-                        <button type="button" onclick="confirmDelete({{ $permission->id }})"
+                        <button type="submit" onclick="return confirm('Tem certeza que deseja apagar este registro?')"
                             class="btn-danger flex items-center space-x-1">
                             <!-- Ícone trash (Heroicons) -->
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -68,27 +69,22 @@
 
             <div class="mb-1">
                 <span class="title-detail-content">ID: </span>
-                <span class="detail-content">{{ $permission->id }}</span>
-            </div>
-
-            <div class="mb-1">
-                <span class="title-detail-content">Título: </span>
-                <span class="detail-content">{{ $permission->title }}</span>
+                <span class="detail-content">{{ $userStatus->id }}</span>
             </div>
 
             <div class="mb-1">
                 <span class="title-detail-content">Nome: </span>
-                <span class="detail-content">{{ $permission->name }}</span>
+                <span class="detail-content">{{ $userStatus->status }}</span>
             </div>
 
             <div class="mb-1">
                 <span class="title-detail-content">Cadastrado: </span>
-                <span class="detail-content">{{ \Carbon\Carbon::parse($permission->created_at)->format('d/m/Y H:i:s') }}</span>
+                <span class="detail-content">{{ \Carbon\Carbon::parse($userStatus->created_at)->format('d/m/Y H:i:s') }}</span>
             </div>
 
             <div class="mb-1">
                 <span class="title-detail-content">Editado: </span>
-                <span class="detail-content">{{ \Carbon\Carbon::parse($permission->updated_at)->format('d/m/Y H:i:s') }}</span>
+                <span class="detail-content">{{ \Carbon\Carbon::parse($userStatus->updated_at)->format('d/m/Y H:i:s') }}</span>
             </div>
 
         </div>

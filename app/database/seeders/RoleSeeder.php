@@ -62,6 +62,7 @@ class RoleSeeder extends Seeder
             'create-permissions',
             'edit-permissions',
             'destroy-permissions',
+            'destroy-users',
         ]);
 
         // User

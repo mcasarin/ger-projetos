@@ -1,0 +1,4 @@
+./app/vendor/fakerphp/faker/src/Faker/Provider/de_CH/Text.php
+./app/vendor/fakerphp/faker/src/Faker/Provider/de_DE/Text.php
+./app/resources/views/users/index.blade.php
+./app/storage/framework/views/b8fe481971397f5b705c3cd215826463.php

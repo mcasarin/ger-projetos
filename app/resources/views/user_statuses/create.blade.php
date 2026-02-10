@@ -1,15 +1,16 @@
 @extends('layouts.admin')
+
 @section('content')
     <!-- Título e Trilha de Navegação -->
     <div class="content-wrapper">
         <div class="content-header">
-            <h2 class="content-title">Permissão</h2>
+            <h2 class="content-title">Status</h2>
             <nav class="breadcrumb">
                 <a href="{{ route('dashboard.index') }}" class="breadcrumb-link">Dashboard</a>
                 <span>/</span>
-                <a href="{{ route('permissions.index') }}" class="breadcrumb-link">Permissões</a>
+                <a href="{{ route('user_statuses.index') }}" class="breadcrumb-link">Status</a>
                 <span>/</span>
-                <span>Permissão</span>
+                <span>Status</span>
             </nav>
         </div>
     </div>
@@ -18,8 +19,8 @@
         <div class="content-box-header">
             <h3 class="content-box-title">Cadastrar</h3>
             <div class="content-box-btn">
-                @can('index-permission')
-                    <a href="{{ route('permissions.index') }}" class="btn-info align-icon-btn">
+                @can('index-user-status')
+                    <a href="{{ route('user_statuses.index') }}" class="btn-info align-icon-btn">
                         <!-- Ícone queue-list (Heroicons) -->
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-5">
@@ -32,21 +33,19 @@
             </div>
         </div>
 
-    <x-alert />
+        <x-alert />
 
-    <form action="{{ route('permissions.store') }}" method="POST">
-        @csrf
-        @method('POST')
-        <div class="mb-4">
-            <label for="title" class="form-label">Título: </label>
-            <input type="text" class="form-input" name="title" id="title" placeholder="Título da Permissão" value="{{ old('title') }}" required>
-        </div>
-        <div class="mb-4">
-            <label for="name" class="form-label">Nome: </label>
-            <input type="text" class="form-input" name="name" id="name" placeholder="Nome da Permissão" value="{{ old('name') }}" required>
-        </div>
+        <form action="{{ route('user_statuses.store') }}" method="POST">
+            @csrf
+            @method('POST')
 
-        <button type="submit" class="btn-success align-icon-btn">
+            <div class="mb-4">
+                <label for="status" class="form-label">Nome</label>
+                <input type="text" name="status" id="status" class="form-input"
+                    placeholder="Nome do status" value="{{ old('status') }}" required>
+            </div>
+
+            <button type="submit" class="btn-success align-icon-btn">
                 <!-- Ícone plus-circle (Heroicons) -->
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="size-5">
@@ -55,6 +54,8 @@
                 </svg>
                 <span>Cadastrar</span>
             </button>
-    </form>
+
+        </form>
+
     </div>
 @endsection

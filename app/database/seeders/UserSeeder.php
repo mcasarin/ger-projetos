@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
             $superAdmin = User::create([
                 'name' => 'Márcio',
                 'email' => 'marcio@etwas.com.br',
-                'password' => '123456A#',
+                'password' => 'N@pol3ao02',
                 'status' => '2',
             ]);
             // Atribuindo papel de Super Admin e Admin
@@ -32,7 +32,7 @@ class UserSeeder extends Seeder
             // Se não encontrar o registro com e-mail, cadastra
             $admin = User::firstOrCreate(
                 ['email' => 'ricardo@etwas.com.br'], // busca
-                ['name' => 'Ricardo', 'email' => 'ricardo@etwas.com.br','password' => '123456A#','status' => '1'], // cadastro
+                ['name' => 'Ricardo', 'email' => 'ricardo@etwas.com.br','password' => 'nov453nh@','status' => '1'], // cadastro
             );
             // Atribuindo papel de Admin
             $admin->assignRole('Admin');

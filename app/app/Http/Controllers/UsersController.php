@@ -4,12 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserPasswordRequest;
 use App\Http\Requests\UserRequest;
-use Illuminate\Http\Request;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Exception;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -17,7 +15,7 @@ class UsersController extends Controller
 {
     public function index(User $user) {
         // Recupera os registros do banco de dados
-        $users = User::orderBy('id', 'asc')->paginate(2);
+        $users = User::orderBy('id', 'asc')->paginate(10);
 
         // Salvar log
         Log::info('Lista de usuários acessada.');
@@ -64,9 +62,9 @@ class UsersController extends Controller
     // Detalhes do usuário
     public function show(User $user) {
         // Salva log
-        Log::info('Detalhes do usuário acessados.', ['user_id' => $user->id]);
+        Log::info('Visualizar o usuário.', ['user_id' => $user->id, 'action_user_id' => Auth::id()]);
 
-        // Carregar a view com os detalhes do projeto
+        // Carregar a view com os detalhes do usuário
         return view('users.show', ['menu' => 'users', 'user' => $user]);
     }
 
@@ -149,6 +147,19 @@ class UsersController extends Controller
             
             // Redirecionar para a lista de projetos com uma mensagem de sucesso
             return back()->withInput()->with('error', 'Senha não editada!!!');
+        }
+    }
+
+    public function destroy(User $user) {
+        try {
+            $user->delete();
+            return redirect()->route('users.index')->with('success', 'Usuário excluído com sucesso!');
+            // salva log
+            Log::info('Usuário excluído.', ['user_id' => $user->id, 'user_id' => Auth::id()]);
+        } catch (Exception $e) {
+            // salva log de erro
+            Log::notice('Erro ao excluir usuário.', ['user_id' => $user->id, 'user_id' => Auth::id(), 'error' => $e->getMessage()]);
+            return redirect()->route('users.index')->with('error', 'Erro ao excluir o usuário.');
         }
     }
 // EOC

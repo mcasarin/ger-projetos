@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProjectsController;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\UserStatusController;
 use App\Http\Controllers\StatusProjsController;
 use App\Http\Controllers\StatusTaskController;
 use App\Http\Controllers\TasksController;
@@ -72,6 +73,17 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/{user}',[UsersController::class, 'update'])->name('users.update')->middleware('permission:edit-users');
         Route::get('/{user}/edit-password',[UsersController::class, 'editPassword'])->name('users.edit_password')->middleware('permission:edit-users-password');
         Route::put('/{user}/update-password',[UsersController::class, 'updatePassword'])->name('users.update_password')->middleware('permission:edit-users-password');
+        Route::delete('/{user}',[UsersController::class, 'destroy'])->name('users.destroy')->middleware('permission:destroy-users');
+    });
+    // Rotas usuários Status
+    Route::prefix('user-statuses')->group(function () {
+        Route::get('/', [UserStatusController::class, 'index'])->name('user_statuses.index')->middleware('permission:index-user-status');
+        Route::get('/create', [UserStatusController::class, 'create'])->name('user_statuses.create')->middleware('permission:create-user-status');
+        Route::get('/{userStatus}', [UserStatusController::class, 'show'])->name('user_statuses.show')->middleware('permission:show-user-status');
+        Route::post('/', [UserStatusController::class, 'store'])->name('user_statuses.store')->middleware('permission:create-user-status');
+        Route::get('/{userStatus}/edit', [UserStatusController::class, 'edit'])->name('user_statuses.edit')->middleware('permission:edit-user-status');
+        Route::put('/{userStatus}', [UserStatusController::class, 'update'])->name('user_statuses.update')->middleware('permission:edit-user-status');
+        Route::delete('/{userStatus}', [UserStatusController::class, 'destroy'])->name('user_statuses.destroy')->middleware('permission:destroy-user-status');
     });
     // Rotas de status dos projetos
     Route::prefix('status-proj')->group(function (){

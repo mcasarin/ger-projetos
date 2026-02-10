@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -55,7 +54,7 @@ class RolePermissionController extends Controller
             ]);
 
             // Redirecionar de volta com mensagem de sucesso
-            return redirect()->route('role-permission.index', $role->id)->with('success', 'Permissão' . ($action === 'bloquear' ? 'bloqueada' : 'liberada') . 'com sucesso.');
+            return redirect()->route('role-permission.index', $role->id)->with('success', 'Permissão ' . ($action === 'bloquear' ? 'bloqueada' : 'liberada') . ' com sucesso.');
         } catch (Exception $e) {
 
             // Salvar log de erro

@@ -1,19 +1,42 @@
 
     @if(session('success'))
-        <div style="color: green;">
-            {{ session('success') }}
-        </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            Swal.fire({
+                icon: "success",
+                title: "Sucesso",
+                text: "{{ session('success') }}"
+            });
+        });
+    </script>
+       
     @endif
     @if(session('error'))
-        <div style="color: red;">
-            {{ session('error') }}
-        </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            Swal.fire({
+                icon: "error",
+                title: "Erro!",
+                text: "{{ session('error') }}"
+            });
+        });
+    </script>
     @endif
 
     @if ($errors->any())
-        <p style="color: red;">
-            @foreach($errors->all() as $error)
-                {{ $error }}<br>
-            @endforeach
-        </p>
+    @php
+    $message = '';
+    foreach ($errors->all() as $error) {
+        $message .= $error . '<br>';
+    }
+    @endphp
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            Swal.fire({
+                icon: "error",
+                title: "Erro!",
+                html: "{!! $message !!}" // html para resolver a quebra de linha
+            });
+        });
+    </script>
     @endif

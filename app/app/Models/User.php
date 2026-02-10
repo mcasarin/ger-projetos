@@ -24,7 +24,6 @@ class User extends Authenticatable implements Auditable
         'name',
         'email',
         'password',
-        'status',
     ];
 
     /**
@@ -51,8 +50,8 @@ class User extends Authenticatable implements Auditable
     }
 
     // Relacionamento com status do usuario
-    public function statusUser()
+    public function userStatus()
     {
-        return $this->belongsTo(StatusUser::class, 'status');
+        return $this->belongsTo(UserStatus::class, 'status', 'id');
     }
 }

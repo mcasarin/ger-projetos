@@ -4,13 +4,13 @@
     <!-- Título e Trilha de Navegação -->
     <div class="content-wrapper">
         <div class="content-header">
-            <h2 class="content-title">Papel</h2>
+            <h2 class="content-title">Status</h2>
             <nav class="breadcrumb">
                 <a href="{{ route('dashboard.index') }}" class="breadcrumb-link">Dashboard</a>
                 <span>/</span>
-                <a href="{{ route('roles.index') }}" class="breadcrumb-link">Papéis</a>
+                <a href="{{ route('user_statuses.index') }}" class="breadcrumb-link">Status</a>
                 <span>/</span>
-                <span>Papel</span>
+                <span>Status</span>
             </nav>
         </div>
     </div>
@@ -19,8 +19,8 @@
         <div class="content-box-header">
             <h3 class="content-box-title">Editar</h3>
             <div class="content-box-btn">
-                @can('index-role')
-                    <a href="{{ route('roles.index') }}" class="btn-info align-icon-btn">
+                @can('index-user-status')
+                    <a href="{{ route('user_statuses.index') }}" class="btn-info align-icon-btn">
                         <!-- Ícone queue-list (Heroicons) -->
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-5">
@@ -31,8 +31,8 @@
                     </a>
                 @endcan
 
-                @can('show-role')
-                    <a href="{{ route('roles.show', ['role' => $role->id]) }}"
+                @can('show-user-status')
+                    <a href="{{ route('user_statuses.show', ['userStatus' => $userStatus->id]) }}"
                         class="btn-primary align-icon-btn">
                         <!-- Ícone eye (Heroicons) -->
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -49,14 +49,14 @@
 
         <x-alert />
 
-        <form action="{{ route('roles.update', ['role' => $role->id]) }}" method="POST">
+        <form action="{{ route('user_statuses.update', ['userStatus' => $userStatus->id]) }}" method="POST">
             @csrf
             @method('PUT')
 
             <div class="mb-4">
-                <label for="name" class="form-label">Nome</label>
-                <input type="text" name="name" id="name" class="form-input"
-                    placeholder="Nome do papel" value="{{ old('name', $role->name) }}" required>
+                <label for="status" class="form-label">Nome</label>
+                <input type="text" name="status" id="status" class="form-input"
+                    placeholder="Nome do status" value="{{ old('status', $userStatus->status) }}" required>
             </div>
 
             <button type="submit" class="btn-warning align-icon-btn">

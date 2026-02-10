@@ -242,6 +242,10 @@
         @apply inline-block;
     }
 
+    .table-actions-project a {
+        @apply visited:text-blue-600 hover:text-purple-500;
+    }
+
     /****** Fim Tabela Listar Registros ******/
 
     /****** Início Formulário Pesquisar ******/
@@ -260,6 +264,21 @@
     /* Input padrão */
     .form-input {
         @apply border p-2 w-full mt-1 rounded-md border-gray-200 shadow-sm focus:border-gray-300 focus:ring focus:ring-gray-200 focus:outline-none dark:border-gray-600 dark:text-gray-200 dark:placeholder-gray-400;
+    }
+    /* Input para checkbox */
+    .form-input-checkbox {
+        @apply text-sm text-gray-500 dark:text-gray-400;
+    }
+    /* Input para data */
+    .form-input-date {
+        @apply border p-2 w-48 mt-1 rounded-md border-gray-200 shadow-sm focus:border-gray-300 focus:ring focus:ring-gray-200 focus:outline-none dark:border-gray-600 dark:text-gray-200 dark:placeholder-gray-400;
+    }
+    /* Input para select */
+    .form-input-select {
+        @apply border md:w-auto px-3 py-2.5 rounded-md border-gray-200 shadow-sm focus:border-gray-300 focus:ring focus:ring-gray-200 focus:outline-none dark:border-gray-600 dark:text-gray-200 dark:placeholder-gray-400;
+    }
+    .form-label-select {
+        @apply mb-2.5 text-sm font-medium;
     }
 
     /****** Fim Formulário ******/

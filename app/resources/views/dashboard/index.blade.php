@@ -20,7 +20,7 @@
                 <x-alert />
 
                 <div class="content-box-body">
-                    Bem-vindo ...!
+                    Aqui será mostrado o dashboard do sistema, com gráficos e informações relevantes para o usuário.
                 </div>
             </div>
     

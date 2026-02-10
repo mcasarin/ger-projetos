@@ -1,35 +1,133 @@
 @extends('layouts.admin')
 @section('content')
-    <h2>Lista de Tarefas</h2>
-    <x-alert />
+<!-- Título e Trilha de Navegação - breadcrumbs -->
+    <div class="content-wrapper">
+        <div class="content-header">
+            <h2 class="content-title">Tarefas</h2>
+            <nav class="breadcrumb">
+                <a href="{{ route('dashboard.index') }}" class="breadcrumb-link">Dashboard</a>
+                <span>/</span>
+                <span>Tarefas</span>
+            </nav>
+        </div>
+    </div>
+    <div class="content-box">
+        <div class="content-box-header">
+            <h3 class="content-box-title">Lista de Tarefas</h3>
+            @can('create-tasks')
+            <div class="content-box-btn">
+                <a href="{{ route('tasks.create') }}" class="btn-success flex items-center space-x-1">
+                    <!-- Ícone plus-circle (Heroicons) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="size-5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    <span>Cadastrar Tarefa</span>
+                </a>
+            </div>
+            @endcan
+            @can('index-status-tasks')
+            <div class="content-box-btn">
+                <a href="{{ route('status_tasks.index') }}" class="btn-warning flex items-center space-x-1">
+                    <!-- Ícone bars-arrow-up (Heroicons) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 4.5h14.25M3 9h9.75M3 13.5h5.25m5.25-.75L17.25 9m0 0L21 12.75M17.25 9v12" />
+                    </svg>
 
-    <a href="{{ route('tasks.create') }}">Cadastrar Tarefa</a>
-    <a href="{{ route('status_tasks.index') }}">Listar Status de Tarefas</a>
-    <a href="{{ route('tasks.index') }}">Listar Tarefas</a>
+                    <span>Listar Status de Tarefas</span>
+                </a>
+            </div>
+            @endcan
+        </div>
+
+        <x-alert />
+
+        <div class="table-container mt-6">
+                    <table class="table">
+                        <thead>
+                            <tr class="table-row-header">
+                                <th class="table-header">ID</th>
+                                <th class="table-header">Nome</th>
+                                <th class="table-header">Descrição</th>
+                                <th class="table-header center">Data Início</th>
+                                <th class="table-header center">Data Término</th>
+                                <th class="table-header">Responsável</th>
+                                <th class="table-header">Projeto</th>
+                                <th class="table-header">Status</th>
+                                <th class="table-header center">Ações</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
     
 
     @forelse ($tasks as $task)
-        <p>
-            <strong>ID:</strong> {{ $task->id }}<br>
-            <strong>Nome:</strong> {{ $task->title }}<br>
-            <strong>Descrição:</strong> {{ $task->description }}<br>
-            <strong>Data de Início:</strong> {{ \Carbon\Carbon::parse($task->start_date)->format('d/m/Y H:i:s') }}<br>
-            <strong>Data de Término:</strong> {{ \Carbon\Carbon::parse($task->due_date)->format('d/m/Y H:i:s') }}<br>
-            <strong>Responsável:</strong> {{ $task->owner->name }}<br>
-            <strong>Projeto:</strong> {{ $task->Project->name }}<br>
-            <strong>Status:</strong> {{ $task->statusRelTask->status ?? 'Não definido' }}<br>
-            <a href="{{ route('tasks.show', ['task' => $task->id]) }}">Detalhes</a><br>
-            <a href="{{ route('tasks.edit', ['task' => $task->id]) }}">Editar</a><br>
-            <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display:inline;">
-                @csrf
-                @method('DELETE')
-                <button type="submit" onclick="return confirm('Tem certeza que deseja excluir esta tarefa?')">Excluir</button>
-            </form>
-        </p>
-        <hr>
-    @empty
-        <p>Nenhuma tarefa encontrada.</p>
-    @endforelse
-    {{-- Paginação dos resultados --}}
-    {{ $tasks->links() }}
+        <tr class="table-row-body">
+                    <td class="table-body">{{ $task->id }}</td>
+                    <td class="table-body">{{ $task->title }}</td>
+                    <td class="table-body">{{ $task->description }}</td>
+                    <td class="table-body center">{{ \Carbon\Carbon::parse($task->start_date)->format('d/m/Y') }}</td>
+                    <td class="table-body center">{{ \Carbon\Carbon::parse($task->end_date)->format('d/m/Y') }}</td>
+                    <td class="table-body">{{ $task->owner->name }}</td>
+                    <td class="table-body table-actions-project"><a href="{{ route('projects.show', ['project' => $task->Project->id]) }}">{{ $task->Project->name }}</a></td>
+                    <td class="table-body">{{ $task->statusRelTask->status ?? 'Não definido' }}</td>
+                    <td class="table-body table-actions">
+                        @can('show-tasks')
+                        <a href="{{ route('tasks.show', ['task' => $task->id]) }}" class="btn-primary hidden md:flex items-center space-x-1">
+                            <!-- Ícone eye (Heroicons) -->
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="size-5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                </svg>
+                                <span>Detalhes</span>
+                                </a>
+                            @endcan
+                            @can('edit-tasks')
+                            <a href="{{ route('tasks.edit', ['task' => $task->id]) }}"
+                                        class="btn-warning hidden md:flex items-center space-x-1">
+                                        <!-- Ícone pencil-square (Heroicons) -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="size-5">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                        </svg>
+                                        <span>Editar</span>
+                                    </a>
+                                    @endcan
+                                    @can('destroy-tasks')
+                                    <form id="delete-form-{{ $task->id }}" action="{{ route('tasks.destroy', $task->id) }}" method="POST">
+                                        @csrf
+                                        @method('delete')
+
+                                        <button type="button" class="btn-danger hidden md:flex items-center space-x-1" onclick="confirmDelete({{ $task->id }})">
+                                        <!-- Ícone trash (Heroicons) -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="size-5">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                        </svg><span>Apagar</span></button>
+
+                                    </form>
+
+                                    @endcan
+                                </td>
+                            </tr>
+                            
+                            @empty
+                            <div class="alert-warning">
+                                Nenhum tarefa encontrada!
+                            </div>
+                            
+                            @endforelse
+                        </tbody>
+                    </table>
+                    <div class="mt-2 p-3">
+                        {{ $tasks->links() }}
+                    </div>
+                </div> <!-- .table-container -->
+    </div> <!-- .content-box -->
 @endsection
