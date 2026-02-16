@@ -32,8 +32,7 @@
             </div>
         </div>
 
-        <x-alert />
-
+    <x-alert />
 
     <form action="{{ route('moviments.store') }}" method="POST">
         @csrf
@@ -43,9 +42,10 @@
             <select class="form-input-select" name="project_id" id="project_id" required>
                 <option value="">Selecione</option>
                 @foreach($listProjects as $project)
-                    <option value="{{ $project->id }}">{{ $project->name }}</option>
+                <option value="{{ $project->id }}" @if(request('project_id') == $project->id) selected @endif>{{ $project->name }}</option>
                 @endforeach
             </select>
+            
             {{-- BLOCO DE ERRO POR CAMPO --}}
             @error('project_id')
                 <span style="color: red; font-size: 0.8em;">{{ $message }}</span>
@@ -99,6 +99,8 @@
                 </svg>
                 <span>Registrar</span>
             </button>
-        </div>
-    </form>
+            </div>
+        </form>
+    </div>
+
 @endsection

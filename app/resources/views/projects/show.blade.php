@@ -3,7 +3,7 @@
 <!-- Título e Trilha de Navegação -->
     <div class="content-wrapper">
         <div class="content-header">
-            <h2 class="content-title">Curso</h2>
+            <h2 class="content-title">Projeto</h2>
             <nav class="breadcrumb">
                 <a href="{{ route('dashboard.index') }}" class="breadcrumb-link">Dashboard</a>
                 <span>/</span>
@@ -110,7 +110,7 @@
             </div>
             <div class="mb-1">
                 <span class="title-detail-content">Criado por:</span>
-                <span class="detail-content">{{ $project->owner_id }}</span>
+                <span class="detail-content">{{ $project->owner->name }}</span>
             </div>
             <div class="mb-1">
                 <span class="title-detail-content">Criado em:</span>
@@ -119,6 +119,106 @@
             <div class="mb-1">
                 <span class="title-detail-content">Atualizado em:</span>
                 <span class="detail-content">{{ \Carbon\Carbon::parse($project->updated_at)->format('d/m/Y H:i:s') }}</span>
+            </div>
+        </div>
+        <div>
+            <div class="content-box mt-4">
+                <div class="content-box-header">
+                    <h3 class="content-box-title">Tarefas do Projeto</h3>
+                    <div class="content-box-btn">
+                        @can('create-tasks')
+                            <a href="{{ route('tasks.create', ['project_id' => $project->id]) }}" class="btn-success align-icon-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                </svg>
+                                <span>Nova Tarefa</span>
+                            </a>
+                        @endcan
+                    </div>
+                </div>
+                @if ($project->tasks->count() > 0)
+                    <div class="table-container mt-6">
+                        <table class="table">
+                            <thead>
+                                <tr class="table-row-header">
+                                    <th class="table-header">ID</th>
+                                    <th class="table-header">Título</th>
+                                    <th class="table-header">Descrição</th>
+                                    <th class="table-header">Status</th>
+                                    <th class="table-header center">Data Início</th>
+                                    <th class="table-header center">Data Término</th>
+                                    <th class="table-header">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($project->tasks->sortBy('start_date') as $task)
+                                    <tr class="table-row-body">
+                                        <td class="table-body">{{ $task->id }}</td>
+                                        <td class="table-body">{{ $task->title }}</td>
+                                        <td class="table-body">{{ Str::limit($task->description, 50) }}</td>
+                                        <td class="table-body">{{ $task->statusRelTask->status ?? 'Não definido' }}</td>
+                                        <td class="table-body center">{{ \Carbon\Carbon::parse($task->start_date)->format('d/m/Y') }}</td>
+                                        <td class="table-body center">{{ \Carbon\Carbon::parse($task->end_date)->format('d/m/Y') }}</td>
+                                        <td class="table-body">
+                                            <a href="{{ route('tasks.show', ['task' => $task->id, 'redirect' => request()->fullUrl()]) }}" class="btn-info btn-sm">Ver</a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @else
+                    <div class="text-center text-gray-500 py-4">Nenhuma tarefa encontrada para este projeto.</div>
+                @endif
+            </div>
+            <div class="content-box mt-4">
+                <div class="content-box-header">
+                    <h3 class="content-box-title">Movimentos Financeiros do Projeto</h3>
+                    <div class="content-box-btn">
+                        @can('create-moviments')
+                            <a href="{{ route('moviments.create', ['project_id' => $project->id]) }}" class="btn-success align-icon-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                </svg>
+                                <span>Novo Movimento</span>
+                            </a>
+                        @endcan
+                    </div>
+                </div>
+                @if ($project->Movimentacao->count() > 0)
+                    <div class="table-container mt-6">
+                        <table class="table">
+                            <thead>
+                                <tr class="table-row-header">
+                                    <th class="table-header">ID</th>
+                                    
+                                    <th class="table-header">Descrição</th>
+                                    <th class="table-header">Tipo</th>
+                                    <th class="table-header">Valor</th>
+                                    <th class="table-header center">Data</th>
+                                    
+                                    <th class="table-header">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($project->Movimentacao->sortBy('start_date') as $moviment)
+                                    <tr class="table-row-body">
+                                        <td class="table-body">{{ $moviment->id }}</td>
+                                        <td class="table-body">{{ Str::limit($moviment->description, 50) }}</td>
+                                        <td class="table-body">{{ $moviment->TypeMoviment->type ?? 'Não definido' }}</td>
+                                        <td class="table-body">R$ {{ number_format($moviment->amount, 2, ',', '.') }}</td>
+                                        <td class="table-body center">{{ \Carbon\Carbon::parse($moviment->created_at)->format('d/m/Y') }}</td>
+                                        <td class="table-body">
+                                            <a href="{{ route('moviments.show', ['moviment' => $moviment->id, 'redirect' => request()->fullUrl()]) }}" class="btn-info btn-sm">Ver</a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @else
+                    <div class="text-center text-gray-500 py-4">Nenhuma movimentação encontrada para este projeto.</div>
+                @endif
             </div>
         </div>
      </div>

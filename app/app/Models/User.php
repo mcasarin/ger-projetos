@@ -54,4 +54,10 @@ class User extends Authenticatable implements Auditable
     {
         return $this->belongsTo(UserStatus::class, 'status', 'id');
     }
+
+    // Relacionamento com tasks
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
 }

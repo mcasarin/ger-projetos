@@ -5,23 +5,50 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserPasswordRequest;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
+use Carbon\Carbon;
 use Spatie\Permission\Models\Role;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Http\Request;
 
 class UsersController extends Controller
 {
-    public function index(User $user) {
+    public function index(Request $request) {
         // Recupera os registros do banco de dados
-        $users = User::orderBy('id', 'asc')->paginate(10);
+        // $users = User::orderBy('id', 'asc')->paginate(10);
+        $users = User::when(
+            $request->filled('name'),
+            fn($query) => $query->whereLike('name', '%' . $request->name . '%')
+        )
+            ->when(
+            $request->filled('email'),
+            fn($query) => $query->whereLike('email', '%' . $request->email . '%')
+        )
+        ->when(
+            $request->filled('start_date_registration'),
+            fn($query) => $query->where('created_at', '>=', Carbon::parse($request->start_date_registration))
+        )
+        ->when(
+            $request->filled('end_date_registration'),
+            fn($query) => $query->where('created_at', '<=', Carbon::parse($request->end_date_registration))
+        )
+        ->orderBy('id', 'desc')
+        ->paginate(10)
+        ->withQueryString();
 
         // Salvar log
         Log::info('Lista de usuários acessada.');
 
         //Carregar a view
-        return view('users.index',['menu' => 'users', 'users' => $users]);
+        return view('users.index',[
+            'menu' => 'users',
+            'name' => $request->name,
+            'email' => $request->email,
+            'start_date_registration' => $request->start_date_registration,
+            'end_date_registration' => $request->end_date_registration,
+            'users' => $users
+            ]);
     }
 
     public function create() {

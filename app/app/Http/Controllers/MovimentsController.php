@@ -132,4 +132,63 @@ class MovimentsController extends Controller
             return redirect()->route('moviments.index')->with('error', 'Erro ao excluir a movimentação. [Err 2]');
         }
     }
+
+    public function sheet(Request $request)
+    {
+        $sortField = $request->get('sort', 'moviment_date');
+        $sortDirection = $request->get('direction', 'asc');
+
+        // Validação de campos permitidos
+        $validFields = ['moviment_date', 'amount', 'id', 'type'];
+        $sortField = in_array($sortField, $validFields) ? $sortField : 'moviment_date';
+    
+        $query = Moviment::with(['projectRel', 'typeMoviment', 'toProject'])
+            ->orderBy($sortField, $sortDirection);
+
+        // Filtros
+        if ($request->filled('project_id')) {
+            $query->where('project_id', $request->project_id);
+        }
+        if ($request->filled('type')) {
+            $query->where('type', $request->type);
+        }
+        if ($request->filled('date_from')) {
+            $query->whereDate('moviment_date', '>=', $request->date_from);
+        }
+        if ($request->filled('date_to')) {
+            $query->whereDate('moviment_date', '<=', $request->date_to);
+        }
+
+        $moviments = $query->paginate(50);
+
+        // TOTais GLOBAIS FILTRADOS (NOVO)
+        $totalRevenuesGlobal = Moviment::where('type', 1)
+            ->when($request->filled('project_id'), fn($q) => $q->where('project_id', $request->project_id))
+            ->when($request->filled('type'), fn($q) => $q->where('type', $request->type))
+            ->when($request->filled('date_from'), fn($q) => $q->whereDate('moviment_date', '>=', $request->date_from))
+            ->when($request->filled('date_to'), fn($q) => $q->whereDate('moviment_date', '<=', $request->date_to))
+            ->sum('amount');
+
+        $totalExpensesGlobal = Moviment::where('type', 2)
+            ->when($request->filled('project_id'), fn($q) => $q->where('project_id', $request->project_id))
+            ->when($request->filled('type'), fn($q) => $q->where('type', $request->type))
+            ->when($request->filled('date_from'), fn($q) => $q->whereDate('moviment_date', '>=', $request->date_from))
+            ->when($request->filled('date_to'), fn($q) => $q->whereDate('moviment_date', '<=', $request->date_to))
+            ->sum('amount');
+
+        Log::info('Planilha financeira acessada.', [
+            'filters' => $request->only(['project_id', 'type', 'date_from', 'date_to']),
+            'totals' => ['revenues' => $totalRevenuesGlobal, 'expenses' => $totalExpensesGlobal]
+        ]);
+
+        $projects = Project::select('id', 'name', 'initial_budget')  // initial_budget!
+            ->orderBy('name')->get();
+        $types = TypeMoviment::select('id', 'type')  // name, não type
+            ->orderBy('type')->get();
+
+        return view('moviments.sheet', compact(
+            'moviments', 'projects', 'types',
+            'totalRevenuesGlobal', 'totalExpensesGlobal'
+        ));
+    }
 }

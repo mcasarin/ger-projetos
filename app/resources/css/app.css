@@ -141,7 +141,7 @@
     }
 
     .sidebar-title {
-        @apply text-lg font-bold text-black;
+        @apply text-lg font-bold text-black dark:text-gray-400;
     }
 
     .sidebar-nav {
@@ -250,7 +250,7 @@
 
     /****** Início Formulário Pesquisar ******/
     .form-search {
-        @apply pb-3 grid xl:grid-cols-5 md:grid-cols-2 gap-2 items-end;
+        @apply pb-0 grid xl:grid-cols-5 md:grid-cols-2 gap-2 items-end;
     }
     /****** Fim Formulário Pesquisar ******/
 
@@ -271,14 +271,14 @@
     }
     /* Input para data */
     .form-input-date {
-        @apply border p-2 w-48 mt-1 rounded-md border-gray-200 shadow-sm focus:border-gray-300 focus:ring focus:ring-gray-200 focus:outline-none dark:border-gray-600 dark:text-gray-200 dark:placeholder-gray-400;
+        @apply border p-2 w-48 mt-1 rounded-md border-gray-200 shadow-sm focus:border-gray-300 focus:ring focus:ring-gray-200 focus:outline-none dark:border-gray-600 dark:text-gray-600 dark:placeholder-gray-200 dark:bg-gray-900;
     }
     /* Input para select */
     .form-input-select {
-        @apply border md:w-auto px-3 py-2.5 rounded-md border-gray-200 shadow-sm focus:border-gray-300 focus:ring focus:ring-gray-200 focus:outline-none dark:border-gray-600 dark:text-gray-200 dark:placeholder-gray-400;
+        @apply border md:w-auto px-3 py-2.5 rounded-md border-gray-200 shadow-sm focus:border-gray-300 focus:ring focus:ring-gray-200 focus:outline-none dark:border-gray-600 dark:text-gray-200 dark:placeholder-gray-400 dark:bg-gray-900;
     }
     .form-label-select {
-        @apply mb-2.5 text-sm font-medium;
+        @apply text-gray-600 block text-sm font-semibold dark:border-gray-600 dark:text-gray-400 dark:placeholder-gray-200;
     }
 
     /****** Fim Formulário ******/

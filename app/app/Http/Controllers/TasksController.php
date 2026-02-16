@@ -27,7 +27,7 @@ class TasksController extends Controller
     public function show(Task $task) {
         // Salva log
         Log::info('Detalhes da tarefa acessados.', ['task_id' => $task->id, 'user_id' => Auth::id()]);
-        $task->load('statusRelTask', 'owner');
+        $task->load('statusRelTask', 'user');
         // Carregar a view com os detalhes do projeto
         return view('tasks.show', ['menu' => 'tasks', 'task' => $task]);
     }

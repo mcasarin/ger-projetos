@@ -23,12 +23,12 @@ class Task extends Model implements Auditable
         return $this->belongsTo(StatusTask::class, 'status', 'id');
     }
 
-    public function Project()
+    public function project()
     {
         return $this->belongsTo(Project::class, 'project_id', 'id');
     }
 
-    public function owner()
+    public function user()
     {
         // O primeiro argumento é a Model relacionada (User::class).
         // O segundo argumento é a coluna local na tabela 'tasks' (owner_id).

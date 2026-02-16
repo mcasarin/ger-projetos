@@ -26,6 +26,16 @@ class Project extends Model implements Auditable
         return $this->hasMany(Moviment::class, 'project_id');
     }
 
+    public function tasks()
+    {
+        return $this->hasMany(Task::class, 'project_id');
+    }
+
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'owner_id');
+    }
+
     // Relação UM PARA MUITOS (PAI): Um projeto C tem um pai B.
     public function parent()
     {

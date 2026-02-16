@@ -16,6 +16,7 @@ use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\PermissionsController;
+use App\Http\Controllers\TaskCalendarController;
 use Illuminate\Support\Facades\Route;
 
 // Rotas publicas
@@ -107,6 +108,10 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/{task}',[TasksController::class, 'update'])->name('tasks.update')->middleware('permission:edit-tasks');
         Route::delete('/{task}',[TasksController::class, 'destroy'])->name('tasks.destroy')->middleware('permission:destroy-tasks');
     });
+    // Rotas de calendário de tarefas
+    Route::prefix('tasks-calendar')->group(function (){
+        Route::get('/calendar', [TaskCalendarController::class, 'calendar'])->name('tasks.calendar')->middleware('permission:index-tasks-calendar');
+    });
     // Rotas de tipos de movimentação
     Route::prefix('type-moviment')->group(function (){
         Route::get('/',[TypeMovimentController::class, 'index'])->name('type_moviments.index')->middleware('permission:index-type-moviments');
@@ -116,6 +121,7 @@ Route::middleware(['auth'])->group(function () {
     // Rotas de Movimentações
     Route::prefix('moviments')->group(function (){
         Route::get('/',[MovimentsController::class, 'index'])->name('moviments.index')->middleware('permission:index-moviments');
+        Route::get('/sheet', [MovimentsController::class, 'sheet'])->name('moviments.sheet')->middleware('permission:index-moviments'); // Nova rota planilha
         Route::get('/create',[MovimentsController::class, 'create'])->name('moviments.create')->middleware('permission:create-moviments');
         Route::post('/',[MovimentsController::class, 'store'])->name('moviments.store')->middleware('permission:create-moviments');
         Route::get('/{moviment}',[MovimentsController::class, 'show'])->name('moviments.show')->middleware('permission:show-moviments');

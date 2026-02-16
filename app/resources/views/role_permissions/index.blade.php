@@ -31,13 +31,14 @@
             </div>
         </div>
 
-
     <x-alert />
+    
     <div class="table-container mt-6">
                     <table class="table">
                         <thead>
                             <tr class="table-row-header">
                                 <th class="table-header">ID</th>
+                                <th class="table-header">Título</th>
                                 <th class="table-header">Nome</th>
                                 <th class="table-header">Papel</th>
                                 <th class="table-header">Ação</th>
@@ -50,6 +51,7 @@
     @forelse ($permissions as $permission)
     <tr class="table-row-body">
                     <td class="table-body">{{ $permission->id }}</td>
+                    <td class="table-body">{{ $permission->title }}</td>
                     <td class="table-body">{{ $permission->name }}</td>
                     <td class="table-body">{{ $role->name }}</td>
                     <td class="table-body center">

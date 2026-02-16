@@ -58,7 +58,7 @@ class ProjectsController extends Controller
         // Validar os dados recebidos do formulário
         try {
             // Adiciona campos que não vêm do formulário, mas são necessários
-            $validatedData['owner_id'] = 1;
+            $validatedData['owner_id'] = Auth::id(); // Define o proprietário como o usuário autenticado
             // Cria o novo projeto usando os dados validados
             $project = Project::create($validatedData);
             // Salva log

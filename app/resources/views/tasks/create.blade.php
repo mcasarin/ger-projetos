@@ -3,13 +3,13 @@
     <!-- Título e Trilha de Navegação -->
     <div class="content-wrapper">
         <div class="content-header">
-            <h2 class="content-title">Projeto</h2>
+            <h2 class="content-title">Tarefa</h2>
             <nav class="breadcrumb">
                 <a href="{{ route('dashboard.index') }}" class="breadcrumb-link">Dashboard</a>
                 <span>/</span>
-                <a href="{{ route('projects.index') }}" class="breadcrumb-link">Projetos</a>
+                <a href="{{ route('tasks.index') }}" class="breadcrumb-link">Tarefas</a>
                 <span>/</span>
-                <span>Projeto</span>
+                <span>Tarefa</span>
             </nav>
         </div>
     </div>
@@ -67,10 +67,10 @@
         <div class="mb-4">
             <label for="project_id" class="form-label-select">Projeto:</label>
             <select name="project_id" id="project_id" class="form-input-select" required>
-                <option value="">Selecione</option>
-                @foreach($listProjects as $project)
-                    <option value="{{ $project->id }}">{{ $project->name }}</option>
-                @endforeach
+            <option value="">Selecione</option>
+            @foreach($listProjects as $project)
+                <option value="{{ $project->id }}" @if(request('project_id') == $project->id) selected @endif>{{ $project->name }}</option>
+            @endforeach
             </select>
         </div>
         <div class="mb-4">

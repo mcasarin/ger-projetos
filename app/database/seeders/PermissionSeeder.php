@@ -60,6 +60,7 @@ class PermissionSeeder extends Seeder
                 ['title' => 'Criar Permissões', 'name' => 'create-permissions'],
                 ['title' => 'Editar Permissões', 'name' => 'edit-permissions'],
                 ['title' => 'Deletar Permissões', 'name' => 'destroy-permissions'],
+                ['title' => 'Listar Calendário de Tarefas', 'name' => 'index-tasks-calendar'],
             ];
 
         foreach ($permissions as $permission) {

@@ -68,8 +68,8 @@
                     <td class="table-body">{{ $task->title }}</td>
                     <td class="table-body">{{ $task->description }}</td>
                     <td class="table-body center">{{ \Carbon\Carbon::parse($task->start_date)->format('d/m/Y') }}</td>
-                    <td class="table-body center">{{ \Carbon\Carbon::parse($task->end_date)->format('d/m/Y') }}</td>
-                    <td class="table-body">{{ $task->owner->name }}</td>
+                    <td class="table-body center">{{ \Carbon\Carbon::parse($task->due_date)->format('d/m/Y') }}</td>
+                    <td class="table-body">{{ $task->user->name }}</td>
                     <td class="table-body table-actions-project"><a href="{{ route('projects.show', ['project' => $task->Project->id]) }}">{{ $task->Project->name }}</a></td>
                     <td class="table-body">{{ $task->statusRelTask->status ?? 'Não definido' }}</td>
                     <td class="table-body table-actions">

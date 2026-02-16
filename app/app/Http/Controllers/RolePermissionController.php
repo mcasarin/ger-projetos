@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
+
 class RolePermissionController extends Controller
 {
     public function index(Role $role) {
@@ -35,7 +36,7 @@ class RolePermissionController extends Controller
         return view('role_permissions.index', [
             'role' => $role,
             'rolePermissions' => $rolePermissions,
-            'permissions' => $permissions,
+            'permissions' => $permissions
         ]);
     }
 
