@@ -186,9 +186,9 @@ class MovimentsController extends Controller
         $types = TypeMoviment::select('id', 'type')  // name, não type
             ->orderBy('type')->get();
 
-        return view('moviments.sheet', compact(
+        return view('moviments.sheet', array_merge(compact(
             'moviments', 'projects', 'types',
             'totalRevenuesGlobal', 'totalExpensesGlobal'
-        ));
+        ), ['menu' => 'sheet']));
     }
 }

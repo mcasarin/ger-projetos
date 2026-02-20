@@ -69,7 +69,7 @@ class AuditReportController extends Controller
                 'date_from' => $request->get('date_from'),
                 'date_to'   => $request->get('date_to'),
             ],
-            'menu'         => 'reports-logs', // para marcar o item de menu ativo
+            'menu'         => 'audit-logs', // para marcar o item de menu ativo
         ]);
     }
 }
