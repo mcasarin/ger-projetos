@@ -17,6 +17,7 @@ use App\Http\Controllers\RolesController;
 use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\TaskCalendarController;
+use App\Http\Controllers\AuditReportController;
 use Illuminate\Support\Facades\Route;
 
 // Rotas publicas
@@ -157,4 +158,11 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/{permission}',[PermissionsController::class, 'update'])->name('permissions.update')->middleware('permission:edit-permissions');
         Route::delete('/{permission}',[PermissionsController::class, 'destroy'])->name('permissions.destroy')->middleware('permission:destroy-permissions');
     });
+
+    // Rotas de logs de auditoria
+    Route::prefix('reports')->group(function () {
+        Route::get('/', [AuditReportController::class, 'index'])
+        ->name('reports.index')
+        ->middleware('permission:view-audit-logs'); // ajuste ao seu sistema de permissões
+});
 });
