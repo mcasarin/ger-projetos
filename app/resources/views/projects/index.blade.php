@@ -14,7 +14,7 @@
     <div class="content-box">
         <div class="content-box-header">
             <h3 class="content-box-title">Lista de Projetos</h3>
-            @can('create-project')
+            @can('create-projects')
             <div class="content-box-btn">
                 <a href="{{ route('projects.create') }}" class="btn-success flex items-center space-x-1">
                     <!-- Ícone plus-circle (Heroicons) -->
