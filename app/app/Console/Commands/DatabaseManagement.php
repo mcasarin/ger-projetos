@@ -30,7 +30,7 @@ class DatabaseManagement extends Command
     }
 
     /**
-     * Executa o Backup usando mysqldump (nativo MariaDB)
+     * Executa o Backup usando mariadb-dump (nativo MariaDB)
      */
     protected function runBackup()
     {
@@ -46,7 +46,7 @@ class DatabaseManagement extends Command
 
         // Comando otimizado para MariaDB 10.11
         $command = sprintf(
-            'mysqldump --user=%s --password=%s --host=%s %s > %s',
+            'mariadb-dump --user=%s --password=%s --host=%s --ssl=0 %s > %s',
             config('database.connections.mysql.username'),
             config('database.connections.mysql.password'),
             config('database.connections.mysql.host'),
@@ -107,7 +107,7 @@ class DatabaseManagement extends Command
         $this->info("Restaurando banco de dados...");
 
         $command = sprintf(
-            'mysql --user=%s --password=%s --host=%s %s < %s',
+            'mariadb-dump --user=%s --password=%s --host=%s --ssl=0 %s < %s',
             config('database.connections.mysql.username'),
             config('database.connections.mysql.password'),
             config('database.connections.mysql.host'),
