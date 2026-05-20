@@ -27,6 +27,30 @@
                 </a>
             </div>
             @endcan
+            @can('index-rubrics')
+            <div class="content-box-btn">
+                <a href="{{ route('rubrics.index') }}" class="btn-warning flex items-center space-x-1">
+                    <!-- Ícone bars-arrow-up (Heroicons) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 4.5h14.25M3 9h9.75M3 13.5h5.25m5.25-.75L17.25 9m0 0L21 12.75M17.25 9v12" />
+                    </svg>
+
+                    <span>Listar Rubricas</span>
+                </a>
+            </div>
+            @endcan
+            @can('index-beneficiaries')
+            <div class="content-box-btn">
+                <a href="{{ route('beneficiaries.index') }}" class="btn-warning flex items-center space-x-1">
+                    <!-- Ícone bars-arrow-up (Heroicons) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 4.5h14.25M3 9h9.75M3 13.5h5.25m5.25-.75L17.25 9m0 0L21 12.75M17.25 9v12" />
+                    </svg>
+
+                    <span>Listar Beneficiários</span>
+                </a>
+            </div>
+            @endcan
             @can('index-type-moviments')
             <div class="content-box-btn">
                 <a href="{{ route('type_moviments.index') }}" class="btn-warning flex items-center space-x-1">
@@ -53,6 +77,8 @@
                                 <th class="table-header">Valor</th>
                                 <th class="table-header">Projeto</th>
                                 <th class="table-header">Tipo</th>
+                                <th class="table-header">Rubrica</th>
+                                <th class="table-header">Beneficiário</th>
                                 <th class="table-header center">Ações</th>
                             </tr>
                         </thead>
@@ -63,10 +89,19 @@
         <tr class="table-row-body">
                     <td class="table-body">{{ $moviment->id }}</td>
                     <td class="table-body">{{ $moviment->description }}</td>
-                    <td class="table-body center">{{ \Carbon\Carbon::parse($moviment->date_moviment)->format('d/m/Y') }}</td>
+                    <td class="table-body center">{{ \Carbon\Carbon::parse($moviment->moviment_date)->format('d/m/Y') }}</td>
                     <td class="table-body center">R$ {{ number_format($moviment->amount, 2, ',', '.') }}</td>
                     <td class="table-body table-actions-project"><a href="{{ route('projects.show', ['project' => $moviment->projectRel->id]) }}">{{ $moviment->projectRel->name }}</a></td>
                     <td class="table-body">{{ $moviment->TypeMoviment->type ?? 'Não definido' }}</td>
+                    <td class="table-body">{{ $moviment->Rubrics->rubric ?? 'Não definido' }}</td>
+                    <td class="table-body">
+                        @if($moviment->beneficiary)
+                            {{ $moviment->beneficiary->name }}<br>
+                            <small class="">{{ $moviment->beneficiary->anonymized_document }}</small>
+                        @else
+                            <span class="">-</span>
+                        @endif
+                    </td>
                     <td class="table-body table-actions">
                         @can('show-moviments')
                         <a href="{{ route('moviments.show', ['moviment' => $moviment->id]) }}" class="btn-primary hidden md:flex items-center space-x-1">

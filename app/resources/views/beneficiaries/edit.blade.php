@@ -3,25 +3,25 @@
  <!-- Título e Trilha de Navegação -->
     <div class="content-wrapper">
         <div class="content-header">
-            <h2 class="content-title">Usuário</h2>
+            <h2 class="content-title">Beneficiário</h2>
             <nav class="breadcrumb">
                 <a href="{{ route('dashboard.index') }}" class="breadcrumb-link">Dashboard</a>
                 <span>/</span>
                 <span>...</span>
                 <span>/</span>
-                <a href="{{ route('users.index') }}"
-                    class="breadcrumb-link">Usuários</a>
+                <a href="{{ route('beneficiaries.index') }}"
+                    class="breadcrumb-link">Beneficiários</a>
                 <span>/</span>
-                <span>Editar Senha</span>
+                <span>Beneficiário</span>
             </nav>
         </div>
     </div>
     <div class="content-box">
         <div class="content-box-header">
-            <h3 class="content-box-title">Editar Senha</h3>
+            <h3 class="content-box-title">Editar Beneficiário</h3>
             <div class="content-box-btn">
-                @can('index-users')
-                    <a href="{{ route('users.index') }}" class="btn-info align-icon-btn">
+                @can('index-beneficiaries')
+                    <a href="{{ route('beneficiaries.index') }}" class="btn-info align-icon-btn">
                         <!-- Ícone queue-list (Heroicons) -->
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-5">
@@ -36,26 +36,34 @@
 
         <x-alert />
     
-    <form action="{{ route('users.update_password', ['user' => $user->id]) }}" method="POST">
+    <form action="{{ route('beneficiaries.update', ['beneficiary' => $beneficiary->id]) }}" method="POST">
         @csrf
         @method('PUT')
         <div class="mb-4">
-            <label for="password" class="form-label">Senha:</label>
-            <input type="password" id="password" name="password" class="form-input" required>
+            <label for="name" class="form-label">Nome:</label>
+            <input type="text" id="name" name="name" class="form-input" value="{{ old('name', $beneficiary->name) }}" required>
             {{-- BLOCO DE ERRO POR CAMPO --}}
-            @error('password')
+            @error('name')
                 <span style="color: red; font-size: 0.8em;">{{ $message }}</span>
             @enderror
         </div>
         <div class="mb-4">
-            <label for="password_confirmation" class="form-label">Confirmar senha:</label>
-            <input type="password" id="password_confirmation" name="password_confirmation" class="form-input" required>
+            <label for="document" class="form-label">Documento:</label>
+            <input type="text" id="document" name="document" class="form-input" value="{{ old('document', $beneficiary->document) }}" required>
             {{-- BLOCO DE ERRO POR CAMPO --}}
-            @error('password_confirmation')
+            @error('document')
                 <span style="color: red; font-size: 0.8em;">{{ $message }}</span>
             @enderror
         </div>
-        <br>
+        <div class="mb-4">
+            <label for="document_type" class="form-label">Tipo de Documento:</label>
+            <input type="text" id="document_type" name="document_type" class="form-input" value="{{ old('document_type', $beneficiary->document_type) }}" required>
+            {{-- BLOCO DE ERRO POR CAMPO --}}
+            @error('document_type')
+                <span style="color: red; font-size: 0.8em;">{{ $message }}</span>
+            @enderror
+        </div>
+        
         <button type="submit" class="btn-warning align-icon-btn">
                 <!-- Ícone pencil-square (Heroicons) -->
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -63,8 +71,9 @@
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                 </svg>
-                <span>Salvar</span>
+                <span>Atualizar</span>
             </button>
     </form>
-        
+    </div>
 @endsection
+

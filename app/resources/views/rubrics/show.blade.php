@@ -3,13 +3,13 @@
 <!-- Título e Trilha de Navegação -->
     <div class="content-wrapper">
         <div class="content-header">
-            <h2 class="content-title">Detalhe da Movimentação</h2>
+            <h2 class="content-title">Detalhe da Rubrica</h2>
             <nav class="breadcrumb">
                 <a href="{{ route('dashboard.index') }}" class="breadcrumb-link">Dashboard</a>
                 <span>/</span>
-                <a href="{{ route('projects.index') }}" class="breadcrumb-link">Movimentações</a>
+                <a href="{{ route('rubrics.index') }}" class="breadcrumb-link">Rubricas</a>
                 <span>/</span>
-                <span>Movimentação</span>
+                <span>Rubrica</span>
             </nav>
         </div>
     </div>
@@ -17,8 +17,8 @@
         <div class="content-box-header">
             <h3 class="content-box-title">Detalhes</h3>
             <div class="content-box-btn">
-                @can('index-moviments')
-                    <a href="{{ route('moviments.index') }}" class="btn-info align-icon-btn">
+                @can('index-rubrics')
+                    <a href="{{ route('rubrics.index') }}" class="btn-info align-icon-btn">
                         <!-- Ícone queue-list (Heroicons) -->
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-5">
@@ -29,8 +29,8 @@
                     </a>
                 @endcan
 
-                @can('edit-moviments')
-                    <a href="{{ route('moviments.edit', ['moviment' => $moviment->id]) }}" class="btn-warning align-icon-btn">
+                @can('edit-rubrics')
+                    <a href="{{ route('rubrics.edit', ['rubric' => $rubric->id]) }}" class="btn-warning align-icon-btn">
                         <!-- Ícone pencil-square (Heroicons) -->
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-5">
@@ -41,12 +41,12 @@
                     </a>
                 @endcan
 
-                @can('destroy-moviments')
-                    <form id="delete-form-{{ $moviment->id }}" action="{{ route('moviments.destroy', ['moviment' => $moviment->id]) }}" method="POST">
+                @can('destroy-rubrics')
+                    <form id="delete-form-{{ $rubric->id }}" action="{{ route('rubrics.destroy', ['rubric' => $rubric->id]) }}" method="POST">
                         @csrf
                         @method('delete')
 
-                        <button type="button" onclick="confirmDelete({{ $moviment->id }})" class="btn-danger flex items-center space-x-1">
+                        <button type="button" onclick="confirmDelete({{ $rubric->id }})" class="btn-danger flex items-center space-x-1">
                             <!-- Ícone trash (Heroicons) -->
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                 stroke="currentColor" class="size-5">
@@ -65,65 +65,32 @@
         <div class="detail-box">
             <div class="mb-1">
                 <span class="title-detail-content">ID:</span>
-                <span class="detail-content">{{ $moviment->id }}</span>
-            </div>
-            <div class="mb-1">
-                <span class="title-detail-content">Projeto:</span>
-                <span class="detail-content">{{ $moviment->projectRel->name }}</span>
-            </div>
-            <div class="mb-1">
-                <span class="title-detail-content">Descrição:</span>
-                <span class="detail-content">{{ $moviment->description }}</span>
-            </div>
-            <div class="mb-1">
-                <span class="title-detail-content">Data:</span>
-                <span class="detail-content">{{ \Carbon\Carbon::parse($moviment->moviment_date)->format('d/m/Y') }}</span>
-            </div>
-            <div class="mb-1">
-                <span class="title-detail-content">Tipo:</span>
-                <span class="detail-content">{{ $moviment->TypeMoviment->type }}</span>
+                <span class="detail-content">{{ $rubric->id }}</span>
             </div>
             <div class="mb-1">
                 <span class="title-detail-content">Rubrica:</span>
-                <span class="detail-content">{{ $moviment->Rubrics->rubric }}</span>
-            </div>
-            <div class="mb-1">
-                <span class="title-detail-content">Valor:</span>
-                <span class="detail-content">R$ {{ number_format($moviment->amount, 2, ',', '.') }}</span>
-            </div>
-            <div class="mb-1">
-                <span class="title-detail-content">Beneficiário:</span>
-                <span class="detail-content">{{ isset($moviment->beneficiary->name) ? $moviment->beneficiary->name : 'N/A' }}</span>
-            </div>
-            <div class="mb-1">
-                <span class="title-detail-content">Documento:</span>
-                <span class="detail-content">{{ isset($moviment->beneficiary->anonymized_document) ? $moviment->beneficiary->anonymized_document : 'N/A' }}</span>
-            </div>
-            <div class="mb-1">
-                <span class="title-detail-content">CPF/CNPJ:</span>
-                <span class="detail-content">{{ strtoupper(isset($moviment->beneficiary->document_type) ? $moviment->beneficiary->document_type : 'N/A') }}</span>
+                <span class="detail-content">{{ $rubric->rubric }}</span>
             </div>
             <div class="mb-1">
                 <span class="title-detail-content">Criado em:</span>
-                <span class="detail-content">{{ \Carbon\Carbon::parse($moviment->created_at)->format('d/m/Y H:i:s') }}</span>
+                <span class="detail-content">{{ \Carbon\Carbon::parse($rubric->created_at)->format('d/m/Y H:i:s') }}</span>
             </div>
             <div class="mb-1">
                 <span class="title-detail-content">Atualizado em:</span>
-                <span class="detail-content">{{ \Carbon\Carbon::parse($moviment->updated_at)->format('d/m/Y H:i:s') }}</span>
+                <span class="detail-content">{{ \Carbon\Carbon::parse($rubric->updated_at)->format('d/m/Y H:i:s') }}</span>
             </div>
         </div>
         @if(request('redirect'))
             <div class="flex justify-end">
-            <a href="{{ route('projects.show', ['project' => $moviment->projectRel->id]) }}" class="btn-warning align-icon-btn">
+            <a href="{{ route('type_moviments.index') }}" class="btn-warning align-icon-btn">
                 <!-- Ícone arrow-left (Heroicons) -->
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
                 </svg>
 
-                <span>Voltar ao Projeto</span>
+                <span>Voltar à lista de rubricas</span>
             </a>
             </div>
         @endif
     </div>
 @endsection
-

@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('type_moviment', function (Blueprint $table) {
+        Schema::create('rubrics', function (Blueprint $table) {
             $table->id();
-            $table->string('type', 100)->unique();
+            $table->string('rubric', 100);
             $table->timestamps();
         });
     }
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('type_moviment');
+        Schema::dropIfExists('rubrics');
     }
 };

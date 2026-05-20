@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Moviment;
 use App\Models\TypeMoviment;
+use App\Models\Rubric;
 use App\Models\Project;
+use App\Models\Beneficiary;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Exception;
@@ -36,32 +38,64 @@ class MovimentsController extends Controller
     public function create() {
         //Carregar a view com coleta dos status para as tasks e lista projetos para associação
         $listTypes = TypeMoviment::all();
+        $listRubrics = Rubric::all();
         $listProjects = Project::all();
+        $listBeneficiaries = Beneficiary::orderBy('name')->limit(10)->get();
         
-        return view('moviments.create', [ 
+        return view('moviments.create', [
             'listProjects' => $listProjects,
-            'listTypes' => $listTypes
+            'listTypes' => $listTypes,
+            'listRubrics' => $listRubrics,
+            'listBeneficiaries' => $listBeneficiaries,
         ]);
     }
 
     public function store(Request $request, Moviment $moviment) {
         //dd($request->all()); // Imprime todos os dados recebidos do formulário
+
+        // IMPORTANTE: Limpa máscara ANTES da validação
+        $request->merge([
+            'beneficiary_document' => preg_replace('/\D/', '', $request->beneficiary_document ?? ''),
+        ]);
         // Validar os dados recebidos do formulário
         $validatedData = $request->validate([
             'project_id' => 'required|exists:projects,id',
             'description' => 'nullable|string',
-            'type' => 'required|in:1,2',
-            'amount' => 'required',
+            'type' => 'required|exists:type_moviment,id',
+            'rubric' => 'required|exists:rubrics,id',
+            'amount' => 'required|numeric|min:0',
             'moviment_date' => 'required|date', // Valida que é uma data válida
+            'beneficiary_name' => 'required|string|max:255',
+            'beneficiary_document' => [
+            'required',
+            'string',
+            'min:11',
+            'max:14',
+            'regex:/^(\d{11}|\d{14})$/',
+            ],
         ]);
         // grava validação no log
         Log::info('Dados validados com sucesso para cadastro de movimento financeiro.', $validatedData);
         try {
+            // Busca ou cria beneficiário
+            $cleanDoc = preg_replace('/[^0-9]/', '', $validatedData['beneficiary_document']);
+            $documentType = strlen($cleanDoc) === 11 ? 'cpf' : 'cnpj';
+            
+            $beneficiary = Beneficiary::firstOrCreate(
+                ['document' => $cleanDoc],
+                [
+                    'name' => $validatedData['beneficiary_name'],
+                    'document_type' => $documentType
+                ]
+            );
             // 1. Cria a movimentação
-            $moviment = Moviment::create($validatedData);
+            $moviment = Moviment::create(array_merge($validatedData, [
+                'beneficiary_id' => $beneficiary->id
+            ]));
             // 2. Busca o projeto e Recalcula os totais
             $project = Project::find($moviment->project_id);
             $project->recalculateFinancials(); // Chama o método de atualização
+            
             // Salva log
             Log::info('Novo movimento financeiro cadastrado.', ['moviment_id' => $moviment->id, 'user_id' => Auth::id()]);
             
@@ -78,44 +112,58 @@ class MovimentsController extends Controller
     // Formulário para editar um movimento existente
     public function edit(Moviment $moviment) {
         // Carregar a view com o formulário de edição
-        $typeMoviment = TypeMoviment::all();
         $listProjects = Project::all();
         $listTypes = TypeMoviment::all();
+        $listRubrics = Rubric::all();
         return view('moviments.edit', [
             'menu' => 'moviments',
             'moviment' => $moviment,
             'listProjects' => $listProjects,
-            'listTypes' => $listTypes
+            'listTypes' => $listTypes,
+            'listRubrics' => $listRubrics
         ]);
     }
 
-    public function update(Request $request, Moviment $moviment) {
-        // Validar os dados recebidos do formulário
+    public function update(Request $request, Moviment $moviment)
+    {
         $validatedData = $request->validate([
             'description' => 'nullable|string',
             'type' => 'required|exists:type_moviment,id',
-            'amount' => 'required',
-            'moviment_date' => 'required|date', // Valida que é uma data válida
+            'rubric' => 'required|exists:rubrics,id',
+            'amount' => 'required|numeric',
+            'moviment_date' => 'required|date',
             'project_id' => 'required|exists:projects,id',
+            // Campos do beneficiário
+            'beneficiary_name' => 'nullable|string|max:255',
+            'beneficiary_document' => 'nullable|string',
         ]);
-        try {
-            $moviment->update([
-                'description' => $validatedData['description'],
-                'type' => $validatedData['type'],
-                'amount' => $validatedData['amount'],
-                'moviment_date' => $validatedData['moviment_date'],
-                'project_id' => $validatedData['project_id'],
-            ]);
-        // salva log
-        Log::info('Movimentação editada. ', ['moviment_id' => $moviment->id, 'user_id' => Auth::id()]);
 
-        return redirect()->route('moviments.show', ['moviment' => $moviment->id])->with('success', 'Movimentação editada com sucesso!');
+        try {
+            // Lógica para o Beneficiário
+            if ($request->filled('beneficiary_name')) {
+                $cleanDoc = preg_replace('/\D/', '', $request->beneficiary_document);
+                
+                // Busca por documento ou cria um novo se não existir
+                $beneficiary = Beneficiary::firstOrCreate(
+                    ['document' => $cleanDoc],
+                    [
+                        'name' => $validatedData['beneficiary_name'],
+                        'document_type' => strlen($cleanDoc) === 11 ? 'cpf' : 'cnpj'
+                    ]
+                );
+                
+                $moviment->beneficiary_id = $beneficiary->id;
+            } 
+            // Se você quiser que "vazio" remova o beneficiário atual, descomente a linha abaixo:
+            // else { $moviment->beneficiary_id = null; }
+
+            $moviment->update($validatedData);
+
+            return redirect()->route('moviments.show', $moviment->id)
+                            ->with('success', 'Movimentação atualizada com sucesso!');
 
         } catch (Exception $e) {
-            // salva log de erro
-            Log::notice('Erro ao editar a movimentação.', ['moviment_id' => $moviment->id, 'error' => $e->getMessage(), 'user_id' => Auth::id()]);
-            // Redirecionar para a lista de movimentações com uma mensagem de erro
-            return back()->withInput()->with('error', 'Movimentação não editada!!!');
+            return back()->withInput()->with('error', 'Erro ao atualizar: ' . $e->getMessage());
         }
     }
 
@@ -133,62 +181,80 @@ class MovimentsController extends Controller
         }
     }
 
-    public function sheet(Request $request)
-    {
-        $sortField = $request->get('sort', 'moviment_date');
-        $sortDirection = $request->get('direction', 'asc');
+        public function sheet(Request $request)
+        {
+            $sortField = $request->get('sort', 'moviment_date');
+            $sortDirection = $request->get('direction', 'asc');
 
-        // Validação de campos permitidos
-        $validFields = ['moviment_date', 'amount', 'id', 'type'];
-        $sortField = in_array($sortField, $validFields) ? $sortField : 'moviment_date';
-    
-        $query = Moviment::with(['projectRel', 'typeMoviment', 'toProject'])
-            ->orderBy($sortField, $sortDirection);
+            $validFields = ['moviment_date', 'amount', 'id', 'type'];
+            $sortField = in_array($sortField, $validFields) ? $sortField : 'moviment_date';
 
-        // Filtros
-        if ($request->filled('project_id')) {
-            $query->where('project_id', $request->project_id);
+            // 1. Iniciamos a Query Base para aplicar os filtros uma única vez
+            $baseQuery = Moviment::query();
+
+            // 2. Aplicação dos Filtros na Query Base
+            if ($request->filled('project_id')) {
+                $baseQuery->where('project_id', $request->project_id);
+            }
+            
+            // Verifique se a coluna no banco é 'type' ou 'type_moviment_id'
+            // Se no seu banco o ID do tipo fica em 'type', mantenha assim:
+            if ($request->filled('type')) {
+                $baseQuery->where('type', $request->type);
+            }
+
+            if ($request->filled('search_beneficiary')) {
+                $search = $request->search_beneficiary;
+                $searchDigits = preg_replace('/\D/', '', $search);
+
+                // Onde existir o beneficiário, filtra por nome ou documento
+                $baseQuery->whereHas('beneficiary', function($q) use ($search, $searchDigits) {
+                    $q->where(function($sub) use ($search, $searchDigits) {
+                        $sub->where('name', 'like', "%{$search}%");
+                        if (!empty($searchDigits)) {
+                            $sub->orWhere('document', 'like', "%{$searchDigits}%");
+                        }
+                    });
+                });
+            }
+
+            if ($request->filled('date_from')) {
+                $baseQuery->whereDate('moviment_date', '>=', $request->date_from);
+            }
+            if ($request->filled('date_to')) {
+                $baseQuery->whereDate('moviment_date', '<=', $request->date_to);
+            }
+
+            // 3. Cálculos de Totais usando CLONE da Query Base (Garante que os filtros sejam idênticos)
+            // Importante: use a coluna correta para identificar tipo 1 (entrada) e 2 (saída)
+            $totalRevenuesGlobal = (clone $baseQuery)->where('type', 1)->sum('amount');
+            $totalExpensesGlobal = (clone $baseQuery)->where('type', 2)->sum('amount');
+
+            // 4. Execução da listagem principal com os relacionamentos
+            $moviments = (clone $baseQuery)
+                ->with(['projectRel', 'typeMoviment', 'toProject', 'beneficiary'])
+                ->orderBy($sortField, $sortDirection)
+                ->paginate(25);
+
+            // 5. Preparação dos dados para os selects da view
+            $projects = Project::select('id', 'name', 'initial_budget')->orderBy('name')->get();
+            $types = TypeMoviment::select('id', 'type')->orderBy('type')->get();
+            $beneficiaries = Beneficiary::select('id', 'name')->orderBy('name')->get();
+
+            Log::info('Planilha financeira acessada.', [
+                'filters' => $request->only(['project_id', 'type', 'date_from', 'date_to', 'search_beneficiary']),
+                'totals' => ['revenues' => $totalRevenuesGlobal, 'expenses' => $totalExpensesGlobal]
+            ]);
+
+            return view('moviments.sheet', array_merge(compact(
+                'moviments', 'projects', 'types', 'beneficiaries',
+                'totalRevenuesGlobal', 'totalExpensesGlobal'
+            ), ['menu' => 'sheet']));
         }
-        if ($request->filled('type')) {
-            $query->where('type', $request->type);
+
+        // Eager loading no sheet()
+        public function scopeWithRelations($query)
+        {
+            return $query->with(['projectRel', 'typeMoviment', 'toProject', 'beneficiary']);
         }
-        if ($request->filled('date_from')) {
-            $query->whereDate('moviment_date', '>=', $request->date_from);
-        }
-        if ($request->filled('date_to')) {
-            $query->whereDate('moviment_date', '<=', $request->date_to);
-        }
-
-        $moviments = $query->paginate(50);
-
-        // TOTais GLOBAIS FILTRADOS (NOVO)
-        $totalRevenuesGlobal = Moviment::where('type', 1)
-            ->when($request->filled('project_id'), fn($q) => $q->where('project_id', $request->project_id))
-            ->when($request->filled('type'), fn($q) => $q->where('type', $request->type))
-            ->when($request->filled('date_from'), fn($q) => $q->whereDate('moviment_date', '>=', $request->date_from))
-            ->when($request->filled('date_to'), fn($q) => $q->whereDate('moviment_date', '<=', $request->date_to))
-            ->sum('amount');
-
-        $totalExpensesGlobal = Moviment::where('type', 2)
-            ->when($request->filled('project_id'), fn($q) => $q->where('project_id', $request->project_id))
-            ->when($request->filled('type'), fn($q) => $q->where('type', $request->type))
-            ->when($request->filled('date_from'), fn($q) => $q->whereDate('moviment_date', '>=', $request->date_from))
-            ->when($request->filled('date_to'), fn($q) => $q->whereDate('moviment_date', '<=', $request->date_to))
-            ->sum('amount');
-
-        Log::info('Planilha financeira acessada.', [
-            'filters' => $request->only(['project_id', 'type', 'date_from', 'date_to']),
-            'totals' => ['revenues' => $totalRevenuesGlobal, 'expenses' => $totalExpensesGlobal]
-        ]);
-
-        $projects = Project::select('id', 'name', 'initial_budget')  // initial_budget!
-            ->orderBy('name')->get();
-        $types = TypeMoviment::select('id', 'type')  // name, não type
-            ->orderBy('type')->get();
-
-        return view('moviments.sheet', array_merge(compact(
-            'moviments', 'projects', 'types',
-            'totalRevenuesGlobal', 'totalExpensesGlobal'
-        ), ['menu' => 'sheet']));
-    }
 }

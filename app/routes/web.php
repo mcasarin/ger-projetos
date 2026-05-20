@@ -18,6 +18,8 @@ use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\TaskCalendarController;
 use App\Http\Controllers\AuditReportController;
+use App\Http\Controllers\RubricsController;
+use App\Http\Controllers\BeneficiariesController;
 use Illuminate\Support\Facades\Route;
 
 // Rotas publicas
@@ -115,9 +117,33 @@ Route::middleware(['auth'])->group(function () {
     });
     // Rotas de tipos de movimentação
     Route::prefix('type-moviment')->group(function (){
-        Route::get('/',[TypeMovimentController::class, 'index'])->name('type_moviments.index')->middleware('permission:index-type-moviments');
-        Route::get('/create',[TypeMovimentController::class, 'create'])->name('type_moviments.create')->middleware('permission:create-type-moviments');
-        Route::post('/',[TypeMovimentController::class, 'store'])->name('type_moviments.store')->middleware('permission:create-type-moviments');
+        Route::get('/', [TypeMovimentController::class, 'index'])->name('type_moviments.index')->middleware('permission:index-type-moviments');
+        Route::get('/create', [TypeMovimentController::class, 'create'])->name('type_moviments.create')->middleware('permission:create-type-moviments');
+        Route::get('/{type_moviment}', [TypeMovimentController::class, 'show'])->name('type_moviments.show')->middleware('permission:show-type-moviments');
+        Route::get('/{type_moviment}/edit', [TypeMovimentController::class, 'edit'])->name('type_moviments.edit')->middleware('permission:edit-type-moviments');
+        Route::post('/', [TypeMovimentController::class, 'store'])->name('type_moviments.store')->middleware('permission:store-type-moviments');
+        Route::put('/{type_moviment}', [TypeMovimentController::class, 'update'])->name('type_moviments.update')->middleware('permission:edit-type-moviments');
+        Route::delete('/{type_moviment}', [TypeMovimentController::class, 'destroy'])->name('type_moviments.destroy')->middleware('permission:destroy-type-moviments');
+    });
+    // Rotas de beneficiarios
+    Route::prefix('beneficiaries')->group(function (){
+        Route::get('/', [BeneficiariesController::class, 'index'])->name('beneficiaries.index')->middleware('permission:index-beneficiaries');
+        Route::get('/create', [BeneficiariesController::class, 'create'])->name('beneficiaries.create')->middleware('permission:create-beneficiaries');
+        Route::get('/{beneficiary}', [BeneficiariesController::class, 'show'])->name('beneficiaries.show')->middleware('permission:show-beneficiaries');
+        Route::get('/{beneficiary}/edit', [BeneficiariesController::class, 'edit'])->name('beneficiaries.edit')->middleware('permission:edit-beneficiaries');
+        Route::post('/', [BeneficiariesController::class, 'store'])->name('beneficiaries.store')->middleware('permission:store-beneficiaries');
+        Route::put('/{beneficiary}', [BeneficiariesController::class, 'update'])->name('beneficiaries.update')->middleware('permission:edit-beneficiaries');
+        Route::delete('/{beneficiary}', [BeneficiariesController::class, 'destroy'])->name('beneficiaries.destroy')->middleware('permission:destroy-beneficiaries');
+    });
+    // Rotas de rubricas
+    Route::prefix('rubrics')->group(function (){
+        Route::get('/',[RubricsController::class, 'index'])->name('rubrics.index')->middleware('permission:index-rubrics');
+        Route::get('/create',[RubricsController::class, 'create'])->name('rubrics.create')->middleware('permission:create-rubrics');
+        Route::get('/{rubric}/edit',[RubricsController::class, 'edit'])->name('rubrics.edit')->middleware('permission:edit-rubrics');
+        Route::get('/{rubric}',[RubricsController::class, 'show'])->name('rubrics.show')->middleware('permission:show-rubrics');
+        Route::post('/',[RubricsController::class, 'store'])->name('rubrics.store')->middleware('permission:store-rubrics');
+        Route::put('/{rubric}',[RubricsController::class, 'update'])->name('rubrics.update')->middleware('permission:edit-rubrics');
+        Route::delete('/{rubric}',[RubricsController::class, 'destroy'])->name('rubrics.destroy')->middleware('permission:destroy-rubrics');
     });
     // Rotas de Movimentações
     Route::prefix('moviments')->group(function (){

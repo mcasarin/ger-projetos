@@ -2,7 +2,7 @@
 @section('content')
 <div class="p-6 space-y-6">
     <div class="flex justify-between items-center">
-        <h1 class="text-2xl font-bold">Planilha Financeira - Movimentações</h1>
+        <h1 class="text font-bold">Planilha Financeira - Movimentações</h1>
         <a href="{{ route('moviments.create') }}" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Nova Movimentação</a>
     </div>
 
@@ -23,9 +23,28 @@
                 <select name="type" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500">
                     <option value="">Todos Tipos</option>
                     @foreach($types as $type)
-                        <option value="{{ $type->id }}" {{ request('type') == $type->id ? 'selected' : '' }}>{{ $type->name }}</option>
+                        <option value="{{ $type->id }}" {{ request('type') == $type->id ? 'selected' : '' }}>{{ $type->type }}</option>
                     @endforeach
                 </select>
+            </div>
+            <!-- <div>
+                <label class="block text-sm font-medium mb-1">Beneficiário</label>
+                <select name="beneficiary_id" class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500">
+                    <option value="">-- Todos Beneficiários --</option>
+                    @foreach($beneficiaries as $beneficiary)
+                        <option value="{{ $beneficiary->id }}" {{ request('beneficiary_id') == $beneficiary->id ? 'selected' : '' }}>
+                            {{ $beneficiary->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div> -->
+            <div>
+                <label class="block text-sm font-medium mb-1">Buscar Beneficiário</label>
+                <input type="text" 
+                    name="search_beneficiary" 
+                    value="{{ request('search_beneficiary') }}" 
+                    placeholder="Nome ou CPF/CNPJ" 
+                    class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-blue-500">
             </div>
             <div>
                 <label class="block text-sm font-medium mb-1">Data Inicial</label>
@@ -82,6 +101,7 @@
                     <th class="p-4 text-left font-semibold text-gray-900">Projeto Origem</th>
                     <th class="p-4 text-left font-semibold text-gray-900">Projeto Destino</th>
                     <th class="p-4 text-left font-semibold text-gray-900">Tipo</th>
+                    <th class="p-4 text-left font-semibold text-gray-900">Beneficiário</th>
                     <th class="p-4 text-right font-semibold text-gray-900">Valor (R$)</th>
                     <th class="p-4 text-right font-semibold text-gray-900">Saldo Projeto</th>
                 </tr>
@@ -97,7 +117,7 @@
             }
         @endphp
         <tr class="hover:bg-gray-50 transition-all">
-            <td class="p-4 font-medium">{{ $moviment->moviment_date->format('d/m/Y') }}</td>
+            <td class="p-4 font-medium">{{ \Carbon\Carbon::parse($moviment->moviment_date)->format('d/m/Y') }}</td>
             <td class="p-4 max-w-xs truncate">{{ $moviment->description ?? '—' }}</td>
             <td class="p-4">
                 <a href="{{ route('projects.show', $moviment->projectRel->id) }}" class="text-blue-600 hover:underline font-medium">
@@ -116,8 +136,19 @@
                     @if($moviment->typeMoviment->id == 1) bg-green-100 text-green-800
                     @elseif($moviment->typeMoviment->id == 2) bg-red-100 text-red-800
                     @else bg-yellow-100 text-yellow-800 @endif">
-                    {{ $moviment->typeMoviment->name }}
+                    {{ $moviment->typeMoviment->type }}
                 </span>
+            </td>
+            <td class="p-4">
+                @if($moviment->beneficiary)
+                    <div class="text-[11px] text-gray-500 mt-1 flex flex-col">
+                        <span class="font-bold text-blue-700 uppercase">
+                            <i class="fas fa-user mr-1"></i> {{ $moviment->beneficiary->name }}
+                        </span>
+                    </div>
+                @else
+                    <span class="text-xs text-gray-400 italic">Sem beneficiário</span>
+                @endif
             </td>
             <td class="p-4 text-right font-bold text-xl
                 @if($moviment->typeMoviment->id == 1) text-green-600
