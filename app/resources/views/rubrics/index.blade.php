@@ -3,20 +3,18 @@
 <!-- Título e Trilha de Navegação - breadcrumbs -->
     <div class="content-wrapper">
         <div class="content-header">
-            <h2 class="content-title">Tipos de Movimentos</h2>
+            <h2 class="content-title">Movimentos</h2>
             <nav class="breadcrumb">
                 <a href="{{ route('dashboard.index') }}" class="breadcrumb-link">Dashboard</a>
                 <span>/</span>
-                <a href="{{ route('moviments.index') }}" class="breadcrumb-link">Movimentações financeiras</a>
-                <span>/</span>
-                <span>Tipos de Movimentos</span>
+                <span>Rubricas</span>
             </nav>
         </div>
     </div>
         <div class="content-box">
         <div class="content-box-header">
-            <h3 class="content-box-title">Listagem de Tipos de Movimentos</h3>
-            @can('index-type_moviments')
+            <h3 class="content-box-title">Listagem de Rubricas</h3>
+            @can('index-rubrics')
             <div class="content-box-btn">
                 <a href="{{ route('moviments.index') }}" class="btn-success flex items-center space-x-1">
                     <!-- Ícone arrow-long-left (Heroicons) -->
@@ -41,39 +39,39 @@
                 </a>
             </div>
             @endcan
-            @can('create-typemoviments')
+            @can('create-rubrics')
             <div class="content-box-btn">
-                <a href="{{ route('type_moviments.create') }}" class="btn-success flex items-center space-x-1">
+                <a href="{{ route('rubrics.create') }}" class="btn-success flex items-center space-x-1">
                     <!-- Ícone plus-circle (Heroicons) -->
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="size-5">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Cadastrar novo Tipo de Movimento</span>
+                    <span>Cadastrar nova Rubrica</span>
                 </a>
             </div>
             @endcan
         </div>
     <x-alert />
-    <div class="table-container mt-6">
+        <div class="table-container mt-6">
                     <table class="table">
                         <thead>
                             <tr class="table-row-header">
                                 <th class="table-header">ID</th>
-                                <th class="table-header">Tipo</th>
+                                <th class="table-header">Rubrica</th>
                                 <th class="table-header center">Ações</th>
                             </tr>
                         </thead>
 
                         <tbody>
-    @forelse ($type_moviments as $type)
+    @forelse ($rubrics as $rubric)
         <tr class="table-row-body">
-            <td class="table-body">{{ $type->id }}</td>
-            <td class="table-body">{{ $type->type }}</td>
-        @can('show-type_moviments')
+                    <td class="table-body">{{ $rubric->id }}</td>
+                    <td class="table-body">{{ $rubric->rubric }}</td>
+                @can('show-rubrics')
                 <td class="table-body table-actions">
-                        <a href="{{ route('type_moviments.show', ['type_moviment' => $type->id]) }}" class="btn-primary hidden md:flex items-center space-x-1">
+                        <a href="{{ route('rubrics.show', ['rubric' => $rubric->id]) }}" class="btn-primary hidden md:flex items-center space-x-1">
                             <!-- Ícone eye (Heroicons) -->
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="size-5">
@@ -85,8 +83,8 @@
                                 <span>Detalhes</span>
                                 </a>
                             @endcan
-                            @can('edit-type_moviments')
-                            <a href="{{ route('type_moviments.edit', ['type_moviment' => $type->id]) }}"
+                            @can('edit-rubrics')
+                            <a href="{{ route('rubrics.edit', ['rubric' => $rubric->id]) }}"
                                         class="btn-warning hidden md:flex items-center space-x-1">
                                         <!-- Ícone pencil-square (Heroicons) -->
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -97,12 +95,12 @@
                                         <span>Editar</span>
                                     </a>
                                     @endcan
-                                    @can('destroy-type_moviments')
-                                    <form id="delete-form-{{ $type->id }}" action="{{ route('type_moviments.destroy', $type->id) }}" method="POST">
+                                    @can('destroy-rubrics')
+                                    <form id="delete-form-{{ $rubric->id }}" action="{{ route('rubrics.destroy', $rubric->id) }}" method="POST">
                                         @csrf
                                         @method('delete')
 
-                                        <button type="button" class="btn-danger hidden md:flex items-center space-x-1" onclick="confirmDelete({{ $type->id }})">
+                                        <button type="button" class="btn-danger hidden md:flex items-center space-x-1" onclick="confirmDelete({{ $rubric->id }})">
                                         <!-- Ícone trash (Heroicons) -->
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="size-5">
@@ -115,8 +113,16 @@
                                     @endcan
                                 </td>
                             </tr>
-    @empty
-        <p>Nenhum tipo de movimento encontrado.</p>
-    @endforelse
+                            
+                            @empty
+                            <div class="alert-warning">
+                                Nenhuma rubrica encontrada!
+                            </div>
+                            
+                            @endforelse
+                        </tbody>
+                    </table>
+                    
+                </div>
+    </div> <!-- .content-box -->
 @endsection
-

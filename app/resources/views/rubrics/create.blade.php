@@ -3,11 +3,13 @@
     <!-- Título e Trilha de Navegação -->
     <div class="content-wrapper">
         <div class="content-header">
-            <h2 class="content-title">Cadastrar Tipo de Movimentações</h2>
+            <h2 class="content-title">Cadastrar Rubrica</h2>
             <nav class="breadcrumb">
                 <a href="{{ route('dashboard.index') }}" class="breadcrumb-link">Dashboard</a>
                 <span>/</span>
-                <a href="{{ route('type_moviments.index') }}" class="breadcrumb-link">Tipos de Movimentações</a>
+                <a href="{{ route('moviments.index') }}" class="breadcrumb-link">Movimentações</a>
+                <span>/</span>
+                <a href="{{ route('rubrics.index') }}" class="breadcrumb-link">Rubricas</a>
                 <span>/</span>
                 <span>Cadastrar</span>
             </nav>
@@ -17,8 +19,8 @@
         <div class="content-box-header">
             <h3 class="content-box-title">Cadastrar</h3>
             <div class="content-box-btn">
-                @can('index-type-moviments')
-                    <a href="{{ route('type_moviments.index') }}"
+                @can('index-rubrics')
+                    <a href="{{ route('rubrics.index') }}"
                         class="btn-info align-icon-btn">
                         <!-- Ícone queue-list (Heroicons) -->
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -33,12 +35,12 @@
         </div>
 
         <x-alert />
-    <form action="{{ route('type_moviments.store') }}" method="POST">
+    <form action="{{ route('rubrics.store') }}" method="POST">
         @csrf
         @method('POST')
         <div class="mb-4">
-            <label for="type" class="form-label">Tipo de movimentação financeira:</label>
-            <input type="text" class="form-input" id="type" name="type" required>
+            <label for="rubric" class="form-label">Rubrica:</label>
+            <input type="text" class="form-input" id="rubric" name="rubric" required>
         </div>
         <div class="mb-4">
             <button type="submit" class="btn-success align-icon-btn">

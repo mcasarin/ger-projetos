@@ -76,6 +76,50 @@
             @enderror
         </div>
         <div class="mb-4">
+            <label for="rubric" class="form-label-select">Rubrica:</label>
+            <select class="form-input-select" name="rubric" id="rubric">
+            @foreach($listRubrics as $rubric)
+                <option value="{{ $rubric->id }}" @selected(old('rubric', $moviment->rubric) == $rubric->id)>
+                {{ $rubric->rubric }}
+                </option>
+            @endforeach
+            </select>
+            {{-- BLOCO DE ERRO POR CAMPO --}}
+            @error('rubric')
+            <span style="color: red; font-size: 0.8em;">{{ $message }}</span>
+            @enderror
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {{-- Campo Nome --}}
+            <div class="mb-4">
+                <label for="beneficiary_name" class="form-label">Nome do Beneficiário:</label>
+                <input type="text" 
+                    class="form-input" 
+                    id="beneficiary_name" 
+                    name="beneficiary_name" 
+                    value="{{ old('beneficiary_name', $moviment->beneficiary?->name) }}"
+                    placeholder="Deixe vazio para não alterar">
+            </div>
+
+            {{-- Campo Documento --}}
+            <div class="mb-4">
+                <label for="beneficiary_document" class="form-label">CPF/CNPJ:</label>
+                <input type="text" 
+                    class="form-input" 
+                    id="beneficiary_document" 
+                    name="beneficiary_document" 
+                    value="{{ old('beneficiary_document', $moviment->beneficiary?->document) }}"
+                    placeholder="Apenas números">
+            </div>
+        </div>
+        <div class="mb-4">
+            <label for="document_type" class="form-label">CPF/CNPJ:</label>
+            <input type="text" class="form-input" id="document_type" name="document_type" value="{{ old('document_type', $moviment->beneficiary?->document_type) }}" required>
+            @error('document')
+                <span style="color: red; font-size: 0.8em;">{{ $message }}</span>
+            @enderror
+        </div>
+        <div class="mb-4">
             <label for="project_id" class="form-label-select">Projeto:</label>
             <select class="form-input-select" name="project_id" id="project_id" required>
                 {{-- Usa @selected para preselecionar o usuário salvo na tarefa. --}}

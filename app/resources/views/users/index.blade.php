@@ -80,7 +80,7 @@
                                 <td class="table-body">{{ $user->name }}</td>
                                 <td class="table-body hidden lg:table-cell">{{ $user->email }}</td>
                                 <td class="table-body table-actions">
-                                    @can('show-user')
+                                    @can('show-users')
                                     <a href="{{ route('users.show', ['user' => $user->id]) }}" class="btn-primary flex items-center space-x-1">
                                         <!-- Ícone eye (Heroicons) -->
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -93,7 +93,7 @@
                                         <span>Visualizar</span>
                                     </a>
                                     @endcan
-                                    @can('edit-user')
+                                    @can('edit-users')
                                     <a href="{{ route('users.edit', ['user' => $user->id]) }}"
                                         class="btn-warning hidden md:flex items-center space-x-1">
                                         <!-- Ícone pencil-square (Heroicons) -->
@@ -105,7 +105,7 @@
                                         <span>Editar</span>
                                     </a>
                                     @endcan
-                                    @can('destroy-user')
+                                    @can('destroy-users')
                                     <form id="delete-form-{{ $user->id }}" action="{{ route('users.destroy', ['user' => $user->id]) }}" method="POST">
                                         @csrf
                                         @method('delete')
